@@ -76,7 +76,8 @@ export function sampleState(over = {}) {
     week: { 1: 'r1', 3: 'r1', 5: 'r1' },
     dayPlan: {},
     exWeights: { '0001': { w: 20 } },
-    bodyweight: [{ d: sampleDay(-19), w: 78 }, { d: sampleDay(0), w: 78.5 }],
+    // An older weigh-in lies outside the limited bodyweight window; the latest remains recent.
+    bodyweight: [{ d: sampleDay(-100), w: 78 }, { d: sampleDay(0), w: 78.5 }],
     customEx: [],
     workouts: [{
       id: 'w1', d: sampleDay(0), name: 'Full body A', start: 1000, end: 1000 + 45 * 60000, vol: 600, prs: [],
