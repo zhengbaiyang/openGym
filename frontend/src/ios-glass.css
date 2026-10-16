@@ -50,7 +50,8 @@
   inset-inline-start: 0;
   inset-inline-end: 0;
   margin-inline: auto;
-  bottom: calc(10px + var(--sab));
+  /* iPhone 17 Pro Max feedback: the old safe-area offset left the dock too high. */
+  bottom: max(8px, calc(var(--sab) - 10px));
   transform: none;
   width: calc(100% - 28px);
   max-width: 530px;
@@ -106,7 +107,21 @@
 /* Room to scroll the last card above the raised Start tab. The existing resting
    and workout-page reserves remain authoritative. */
 :root[data-ios-glass="on"] body:not(.no-tabbar):not(.resting) #app {
-  padding-bottom: calc(124px + var(--sab));
+  padding-bottom: calc(112px + var(--sab));
+}
+
+/* A subtle native-status-area scrim prevents a scrolled page title from passing
+   visibly behind the clock and wireless indicators. Only applied to Health screen. */
+:root[data-ios-glass="on"] .ios-health-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  height: var(--sat);
+  pointer-events: none;
+  background: var(--bg);
+  opacity: .93;
+  z-index: 85;
 }
 
 /* Glass as a layer, not a translucent film over workout numbers. */
