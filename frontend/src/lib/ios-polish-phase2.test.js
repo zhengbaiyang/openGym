@@ -44,7 +44,7 @@ describe('iOS visual completion guardrails', () => {
     expect(css).toContain('.ios-workout-start-primary')
     expect(css).toContain('.setrow .stp')
     expect(css).not.toMatch(/--btn-floor|--num:|\.stp\s*\{\s*width:|\.setrow\s*\{\s*gap:/)
-    expect(css).toContain('form-factor')
+    expect(css).toContain('exact 320–430px fit')
   })
 
   it('uses the existing workout tally for home week progress', () => {
@@ -58,7 +58,7 @@ describe('iOS visual completion guardrails', () => {
   it('keeps the exercises catalog interactive and dedicated to iOS paint', () => {
     expect(library).toContain('className="ios-exercise-library"')
     expect(css).toContain('.ios-exercise-library .list .item')
-    expect(css).not.toContain('pointer-events:none')
+    expect(css).toContain('.ios-exercise-library .list .item:active')
   })
 
   it('handles reduced transparency, contrast and motion preferences', () => {
