@@ -53,6 +53,14 @@ export function writeState(dir, uid, S) {
   fs.writeFileSync(path.join(dir, 'state-' + uid + '.json'), JSON.stringify(S));
 }
 
+/** A recent, stable-relative test day. Fixed July 2026 samples aged past the Coach's
+ * 12-week review window, making otherwise healthy fixture runs report 'nochange'.
+ * Anchor once per test process so every expectation in that process agrees.
+ * offset = 0 is two weeks ago; negative offsets are earlier days.
+ */
+const sampleAnchor = Date.now() - 14 * 86400000;
+export const sampleDay = (offset = 0) => new Date(sampleAnchor + offset * 86400000).toISOString().slice(0, 10);
+
 /** A profile that has consented and has some history — the usual starting point. */
 export function sampleState(over = {}) {
   return {
@@ -68,10 +76,10 @@ export function sampleState(over = {}) {
     week: { 1: 'r1', 3: 'r1', 5: 'r1' },
     dayPlan: {},
     exWeights: { '0001': { w: 20 } },
-    bodyweight: [{ d: '2026-07-01', w: 78 }, { d: '2026-07-20', w: 78.5 }],
+    bodyweight: [{ d: sampleDay(-19), w: 78 }, { d: sampleDay(0), w: 78.5 }],
     customEx: [],
     workouts: [{
-      id: 'w1', d: '2026-07-20', name: 'Full body A', start: 1000, end: 1000 + 45 * 60000, vol: 600, prs: [],
+      id: 'w1', d: sampleDay(0), name: 'Full body A', start: 1000, end: 1000 + 45 * 60000, vol: 600, prs: [],
       entries: [{
         id: '0001', target: { sets: 3, reps: 10, weight: 20 },
         sets: [{ w: 20, r: 10, done: true, rpe: 9.5 }, { w: 20, r: 9, done: true, rpe: 10 }, { w: 20, r: 8, done: true, rpe: 10 }]
