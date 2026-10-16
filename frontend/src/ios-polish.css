@@ -1,0 +1,379 @@
+/*
+ * openGym iOS 27 visual refinement — deliberately paint-only.
+ *
+ * This layer is loaded AFTER index.css and ios-glass.css, and every selector
+ * requires data-ios-glass="on". Android and web stay visually untouched.
+ * The floating dock was corrected and then confirmed on a real iPhone 17 Pro
+ * Max: DO NOT edit its edges, transform, bottom, width, or safe-area rules here.
+ *
+ * These are WebView glass-inspired surfaces, NOT native UIKit Liquid Glass.
+ */
+
+/* Saturated reflections without resorting to fully see-through workout inputs. */
+:root[data-ios-glass="on"] {
+  --ios-lustre: rgba(255,255,255,.105);
+  --ios-lustre-fade: rgba(255,255,255,.018);
+  --ios-panel-base: rgba(24,34,51,.88);
+  --ios-list-base: rgba(27,37,51,.84);
+  --ios-edge: rgba(207,229,255,.18);
+  --ios-edge-strong: rgba(226,242,255,.24);
+  --ios-shadow-soft: 0 15px 32px -22px rgba(0,0,0,.7);
+  --ios-control: rgba(255,255,255,.075);
+  --ios-panel-glow: rgba(67,125,202,.14);
+}
+
+:root[data-ios-glass="on"][data-theme="light"] {
+  --ios-lustre: rgba(255,255,255,.94);
+  --ios-lustre-fade: rgba(255,255,255,.03);
+  --ios-panel-base: rgba(251,253,255,.87);
+  --ios-list-base: rgba(247,250,255,.88);
+  --ios-edge: rgba(132,161,200,.26);
+  --ios-edge-strong: rgba(255,255,255,.98);
+  --ios-shadow-soft: 0 15px 30px -23px rgba(41,75,122,.38);
+  --ios-control: rgba(88,110,158,.07);
+  --ios-panel-glow: rgba(69,142,239,.12);
+}
+
+/* Make the canvas a coherent material field instead of isolated blue rectangles. */
+:root[data-ios-glass="on"] body {
+  background-image:
+    radial-gradient(ellipse 90% 42% at 85% 0%, rgba(71,112,192,.2), transparent 78%),
+    radial-gradient(ellipse 82% 48% at 8% 60%, rgba(36,138,135,.11), transparent 83%),
+    linear-gradient(180deg, rgba(10,15,26,.14), transparent 65%);
+  background-color:var(--bg);
+}
+:root[data-ios-glass="on"][data-theme="light"] body {
+  background-image:
+    radial-gradient(ellipse 90% 36% at 87% 0%, rgba(124,173,246,.2), transparent 79%),
+    radial-gradient(ellipse 85% 46% at 10% 70%, rgba(142,161,246,.12), transparent 82%),
+    linear-gradient(180deg, rgba(255,255,255,.12), transparent 70%);
+}
+
+/* The outline is a light catch, not a heavy stroke. Two static gradient paints
+ * create an optical refraction impression without an expensive second blur. */
+:root[data-ios-glass="on"] .card,
+:root[data-ios-glass="on"] .tile {
+  background:
+    radial-gradient(ellipse 110% 66% at 2% 0%, var(--ios-lustre), transparent 73%),
+    linear-gradient(144deg, var(--ios-panel-glow), transparent 64%),
+    linear-gradient(170deg, var(--ios-lustre-fade), transparent 87%),
+    var(--ios-panel-base);
+  border:1px solid var(--ios-edge);
+  border-top-color:var(--ios-edge-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    var(--ios-shadow-soft);
+}
+:root[data-ios-glass="on"] .sect-b,
+:root[data-ios-glass="on"] .item {
+  background:
+    linear-gradient(155deg, var(--ios-lustre-fade), transparent 72%),
+    var(--ios-list-base);
+  border:1px solid var(--ios-edge);
+  border-top-color:var(--ios-edge-strong);
+  box-shadow:var(--ios-shadow-soft);
+}
+:root[data-ios-glass="on"] .card {
+  padding:18px;
+  margin-bottom:14px;
+  border-radius:25px;
+}
+:root[data-ios-glass="on"] .sect-b { border-radius:22px; }
+:root[data-ios-glass="on"] .tile { border-radius:22px; padding:16px; }
+:root[data-ios-glass="on"] .item { border-radius:19px; }
+:root[data-ios-glass="on"] .card h2 {
+  font-size:20px;
+  font-weight:600;
+  letter-spacing:-.022em;
+  line-height:1.2;
+}
+:root[data-ios-glass="on"] .card h2 + .muted {
+  line-height:1.45;
+}
+
+/* Page typography preserves system Dynamic Type, with concise, differentiated
+ * hierarchy. The button remains its existing accessible hit target. */
+:root[data-ios-glass="on"] .hdr {
+  margin-block:13px 20px;
+  gap:12px;
+}
+:root[data-ios-glass="on"] .hdr h1 {
+  font-weight:700;
+  letter-spacing:-.043em;
+  line-height:1.08;
+}
+:root[data-ios-glass="on"] .hdr .sub {
+  color:var(--label-2);
+  letter-spacing:.006em;
+  line-height:1.4;
+  margin-top:6px;
+}
+:root[data-ios-glass="on"] .iconbtn {
+  border:1px solid var(--ios-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 4px 10px -8px #000;
+  transition:background var(--fast),transform var(--fast) var(--ease),border-color var(--fast);
+}
+:root[data-ios-glass="on"] .iconbtn:active {
+  background:var(--surface-2);
+}
+
+/* Existing home-week logic and state remain intact; paint the most useful content
+ * with a stronger focal point and give the date row a calmer background. */
+:root[data-ios-glass="on"] .ios-home-week {
+  background:
+    radial-gradient(ellipse 110% 100% at 110% -10%, rgba(70,145,193,.2), transparent 73%),
+    radial-gradient(ellipse 110% 70% at -25% 0%, var(--ios-lustre), transparent 76%),
+    var(--ios-panel-base);
+  padding:20px 18px 17px;
+}
+:root[data-ios-glass="on"] .ios-home-week .week {
+  gap:3px;
+  margin:4px -2px 13px;
+}
+:root[data-ios-glass="on"] .ios-home-week .wday {
+  border-radius:18px;
+  min-width:0;
+}
+:root[data-ios-glass="on"] .ios-home-week .wday .lbl {
+  font-size:11px;
+  letter-spacing:.065em;
+}
+:root[data-ios-glass="on"] .ios-home-week .wday.today .num {
+  box-shadow:0 6px 17px -6px color-mix(in srgb,var(--acc) 64%,transparent);
+}
+:root[data-ios-glass="on"] .ios-home-week .today-row {
+  border-radius:19px;
+  border:1px solid color-mix(in srgb,var(--ios-edge) 65%,transparent);
+  background:
+    linear-gradient(130deg, color-mix(in srgb,var(--acc) 5%,transparent), transparent 62%),
+    var(--ios-control);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+}
+:root[data-ios-glass="on"] .ios-home-week .today-row:active {
+  background:var(--surface-2);
+}
+:root[data-ios-glass="on"] .ios-home-week .today-row .ttl {
+  letter-spacing:-.018em;
+}
+
+/* Quick actions: each card earns its own subtle identity but reuses the same
+ * component proportions. Status / actions stay legible on both themes. */
+:root[data-ios-glass="on"] .ios-home-checkin {
+  background:
+    radial-gradient(ellipse 100% 90% at 0% 0%, rgba(67,154,255,.14), transparent 77%),
+    var(--ios-panel-base);
+}
+:root[data-ios-glass="on"] .ios-home-welcome {
+  background:
+    radial-gradient(ellipse 120% 100% at 0% 0%, color-mix(in srgb,var(--acc) 12%,transparent), transparent 70%),
+    var(--ios-panel-base);
+}
+:root[data-ios-glass="on"] .ios-home-weight {
+  background:
+    radial-gradient(ellipse 120% 100% at 100% -20%, rgba(85,143,221,.15), transparent 72%),
+    var(--ios-panel-base);
+}
+:root[data-ios-glass="on"] .ios-home-streak {
+  background:
+    radial-gradient(ellipse 110% 110% at 0% 0%, rgba(255,159,10,.10), transparent 77%),
+    var(--ios-panel-base);
+}
+:root[data-ios-glass="on"] .ios-home .card.tappable {
+  transition:transform var(--fast) var(--ease),border-color var(--fast);
+}
+:root[data-ios-glass="on"] .ios-home .card.tappable:active {
+  transform:scale(.987);
+  border-color:color-mix(in srgb,var(--acc) 38%,var(--ios-edge));
+}
+:root[data-ios-glass="on"] .ios-home .card .lrow-i {
+  border-radius:12px;
+}
+
+/* Stats becomes a metric dashboard, not a grid of identical opaque squares. */
+:root[data-ios-glass="on"] .tiles {
+  gap:10px;
+  margin-bottom:14px;
+}
+:root[data-ios-glass="on"] .tile .l {
+  color:var(--label-2);
+  line-height:1.34;
+  letter-spacing:.006em;
+}
+:root[data-ios-glass="on"] .tile .l .icn { color:var(--acc); }
+:root[data-ios-glass="on"] .tile .v {
+  font-size:30px;
+  font-weight:650;
+  margin-top:10px;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.038em;
+}
+:root[data-ios-glass="on"] .chart {
+  border-radius:15px;
+}
+
+/* Plan, library, exercise cards: soften the separator edge and make filters
+ * resemble glass controls instead of opaque tags. Keep every touch target. */
+:root[data-ios-glass="on"] .plan-week .item,
+:root[data-ios-glass="on"] .plan-loop .item {
+  min-height:64px;
+  gap:13px;
+}
+:root[data-ios-glass="on"] .item .tt {
+  font-size:16px;
+  font-weight:550;
+}
+:root[data-ios-glass="on"] .item .ss {
+  margin-top:4px;
+  line-height:1.32;
+}
+:root[data-ios-glass="on"] .thumb {
+  border-radius:13px;
+}
+:root[data-ios-glass="on"] .tag {
+  border:1px solid color-mix(in srgb,var(--ios-edge) 70%,transparent);
+  background:var(--ios-control);
+  border-radius:10px;
+}
+:root[data-ios-glass="on"] .chip {
+  border:1px solid var(--ios-edge);
+  border-radius:99px;
+  background:var(--ios-control);
+  padding:7px 14px;
+  transition:background var(--fast),border-color var(--fast),color var(--fast);
+}
+:root[data-ios-glass="on"] .chip.on {
+  background:var(--acc);
+  color:var(--on-acc);
+  border-color:transparent;
+  box-shadow:0 4px 14px -8px color-mix(in srgb,var(--acc) 75%,transparent);
+}
+:root[data-ios-glass="on"] .search-row>.ex-view-btn,
+:root[data-ios-glass="on"] .search .input,
+:root[data-ios-glass="on"] .searchf .field {
+  background:var(--ios-list-base);
+  border:1px solid var(--ios-edge);
+  border-radius:16px;
+}
+:root[data-ios-glass="on"] .search .input:focus,
+:root[data-ios-glass="on"] .searchf .field:focus {
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--acc) 45%,transparent);
+  border-color:var(--acc);
+}
+
+/* Trainable controls use sturdy fills, with clear surface distinction. */
+:root[data-ios-glass="on"] .btn {
+  border-radius:17px;
+  min-height:42px;
+}
+:root[data-ios-glass="on"] .btn.primary {
+  background:linear-gradient(160deg,
+    color-mix(in srgb,var(--acc) 83%,white 17%),
+    var(--acc) 78%);
+  color:var(--on-acc);
+  box-shadow:0 7px 18px -13px color-mix(in srgb,var(--acc) 85%,transparent);
+}
+:root[data-ios-glass="on"] .btn.tinted {
+  background:color-mix(in srgb,var(--acc) 15%,var(--ios-control));
+  border:1px solid color-mix(in srgb,var(--acc) 23%,transparent);
+}
+:root[data-ios-glass="on"] .btn:disabled {
+  opacity:.42;
+  box-shadow:none;
+}
+:root[data-ios-glass="on"] .seg {
+  background:var(--ios-control);
+  border:1px solid var(--ios-edge);
+  border-radius:13px;
+}
+:root[data-ios-glass="on"] .seg-sel {
+  border-radius:10px;
+  box-shadow:0 2px 7px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.09);
+}
+:root[data-ios-glass="on"] .field,
+:root[data-ios-glass="on"] .input {
+  border:1px solid transparent;
+  border-radius:15px;
+}
+:root[data-ios-glass="on"] .field:focus,
+:root[data-ios-glass="on"] .input:focus {
+  border-color:var(--acc);
+}
+
+/* Grouped settings and sheets belong to the same hierarchy as cards. */
+:root[data-ios-glass="on"] .sect-t {
+  font-size:12px;
+  letter-spacing:.03em;
+  font-weight:550;
+}
+:root[data-ios-glass="on"] .lrow {
+  min-height:48px;
+}
+:root[data-ios-glass="on"] .lrow-i {
+  border-radius:10px;
+}
+:root[data-ios-glass="on"] .sheet,
+:root[data-ios-glass="on"] .center {
+  border-color:var(--ios-edge-strong);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 22px 68px rgba(0,0,0,.32);
+}
+:root[data-ios-glass="on"] .mback {
+  background:rgba(3,8,17,.52);
+  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(5px);
+}
+
+/* The dock has passed real iPhone geometry QA: adjust only reflectance here. */
+:root[data-ios-glass="on"] #tabbar {
+  border-color:var(--ios-edge-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(255,255,255,.025),
+    0 18px 48px -22px rgba(0,0,0,.7);
+}
+:root[data-ios-glass="on"] #tabbar button.on:not(.start) .tab-ic {
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--acc) 24%,transparent);
+}
+:root[data-ios-glass="on"] #tabbar button.start .cir {
+  box-shadow:
+    0 0 0 5px var(--glass-deep),
+    0 10px 25px -6px color-mix(in srgb,var(--acc) 50%,transparent),
+    inset 0 2px 0 rgba(255,255,255,.23);
+}
+
+/* A phone in light mode still looks deliberate: no chalk-white card fill and
+ * enough separation for labels while allowing a restrained sky-blue cast. */
+:root[data-ios-glass="on"][data-theme="light"] .card,
+:root[data-ios-glass="on"][data-theme="light"] .tile {
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.94),var(--ios-shadow-soft);
+}
+:root[data-ios-glass="on"][data-theme="light"] .ios-home-week .today-row {
+  background:rgba(93,114,161,.07);
+}
+
+/* System accessibility wins over ornament. In particular, the appended
+ * gradients must not reintroduce translucency after the original fallback. */
+@media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
+  :root[data-ios-glass="on"] .card,
+  :root[data-ios-glass="on"] .tile,
+  :root[data-ios-glass="on"] .sect-b,
+  :root[data-ios-glass="on"] .item,
+  :root[data-ios-glass="on"] .ios-home-week,
+  :root[data-ios-glass="on"] .ios-home-checkin,
+  :root[data-ios-glass="on"] .ios-home-welcome,
+  :root[data-ios-glass="on"] .ios-home-weight,
+  :root[data-ios-glass="on"] .ios-home-streak {
+    background:var(--surface);
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+  :root[data-ios-glass="on"] .ios-home-week .today-row,
+  :root[data-ios-glass="on"] .chip,
+  :root[data-ios-glass="on"] .search .input,
+  :root[data-ios-glass="on"] .searchf .field {
+    background:var(--surface-2);
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  :root[data-ios-glass="on"] .ios-home .card.tappable,
+  :root[data-ios-glass="on"] .chip { transition:none; }
+}
