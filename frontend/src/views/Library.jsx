@@ -67,7 +67,7 @@ export default function Library() {
     </div>
   }
 
-  return <>
+  return <div className="ios-exercise-library">
     <div className="hdr lib-hdr"><div><h1>{t('Exercises')}</h1></div>
       <Button size="sm" variant="tinted" icon="figureStrength" onClick={() => nav('/muscles')}>{t('By muscle')}</Button>
       <div className="sub lib-count">{ownCount
@@ -112,6 +112,6 @@ export default function Library() {
       {similar.map(row)}
     </div>
     {f.length > shown && <><div style={{ height: 10 }} /><Button ref={moreRef} onClick={() => setShown(s => s + 40)}>{t('Show more')}</Button></>}
-  </>
+  </div>
 }
 
