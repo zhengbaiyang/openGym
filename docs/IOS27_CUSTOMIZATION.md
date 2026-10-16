@@ -27,6 +27,14 @@ This branch contains **work in progress**, not a release IPA. `main` must remain
 - Validate both light and dark appearances and the iOS 27 accessibility options for reduced transparency and increased contrast.
 - The user may still use a third-party signing app; **HealthKit entitlement support must be verified on device**. If unsupported, the UI-only IPA releases without any HealthKit prompt, while the health implementation remains gated.
 
+## HealthKit signing probe slice (October 2026)
+- Added `HealthReadProbePlugin.swift` and its Capacitor Objective-C registration; these only inspect whether the **installed and signed** iOS process reports a HealthKit entitlement and whether HealthKit is available. No permission prompt or health sample query is implemented in this slice.
+- Added the iOS-only Apple Health entry on Home and Stats plus a dedicated readiness screen. Android and browser navigation remain unchanged. The five bottom tabs remain as before.
+- This diagnostic is allowed in the **UI-only fallback IPA**. A `false` entitlement result on third-party signing is expected and must not be presented as a user-denied permission.
+- Do NOT add `CODE_SIGN_ENTITLEMENTS` or request HealthKit read authorization in the default unsigned IPA workflow until a compatible provisioning profile and signed-device test have been verified.
+- Next approved slices: permission-category opt-in, anchored incremental reads, independent backup-excluded local database, secure storage, historical import, timeline dedupe and tests. A successful probe/build does not mean any of those functions are complete.
+- Test on iPhone 17 Pro Max / iOS 27.0.1: open the new Apple Health card, tap **Check signing compatibility** and capture the status text (no private health data is exposed). Keep all legacy workout features intact.
+
 ## Acceptance gates / pending work
 1. **Visual baseline:** build on a Mac and review on a physical iPhone in both themes, including small screens and accessibility modes.
 2. **Signing spike:** request HealthKit read entitlements only; verify the eventual provisioning profile contains required entitlements. A buildable unsigned IPA alone proves no HealthKit authorization.
