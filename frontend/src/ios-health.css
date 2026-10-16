@@ -40,3 +40,17 @@
 .ios-health-privacy-row { display:flex; gap:11px; align-items:center; margin:12px 0; font-size:15px }
 .ios-health-privacy-row .icn { flex:none; font-size:21px; color:var(--green) }
 .ios-health-privacy p { margin-top:16px; line-height:1.5 }
+
+.ios-health-actions { display:flex; gap:10px; flex-wrap:wrap; width:100%; }
+.ios-health-actions > .btn { flex:1 1 180px; min-height:48px; }
+.ios-health-history h2 { margin:0; }
+.ios-health-workout {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:15px;
+  padding:15px 0; border-bottom:1px solid var(--sep);
+  font-size:15px;
+}
+.ios-health-workout:last-of-type { border-bottom:0; }
+.ios-health-workout > div:first-child { min-width:0; }
+.ios-health-workout-meta { display:flex; flex-direction:column; text-align:end; align-items:flex-end; gap:4px; flex:none; font-size:13px; }
+.ios-health-workout-meta span { color:var(--label-2) }
+.ios-health-history > p { margin-top:14px; line-height:1.5; }
