@@ -47,7 +47,7 @@ export default function Health() {
             state.error || healthCapabilityMessage(state.data)}</span>
         </div>
         <button className="btn tinted" disabled={state.loading} onClick={inspect}>
-          <Icon name="refresh" /> Check signing compatibility
+          <Icon name="repeat" /> Check signing compatibility
         </button>
       </section>
 
