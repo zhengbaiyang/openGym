@@ -7,6 +7,7 @@ import { startMediaSync } from './lib/media-sync.js'
 import { startNativeKeyboard } from './lib/native-keyboard.js'
 import './index.css'
 import './ios-glass.css'
+import './ios-health.css'
 import { setIOSGlassPlatform } from './lib/ios-glass.js'
 
 // Mark only the native iOS shell. Safari/PWA and Android retain the upstream UI.
