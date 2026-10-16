@@ -172,10 +172,8 @@
 :root[data-ios-glass="on"] .setrow .ck.on {
   border-color:transparent;
 }
-:root[data-ios-glass="on"] .workout-swipe-preview,
-:root[data-ios-glass="on"] .workout-swipe-card {
-  background:transparent;
-}
+/* Leave SwipeCards' opaque surfaces untouched: the next card must never show
+ * through a current set editor before the horizontal gesture begins. */
 /* Undo swipe pane stays opaque for reliable contrast while moving. */
 :root[data-ios-glass="on"] .swrow .swfront {
   background:var(--ios-panel-base);
@@ -319,6 +317,16 @@
 }
 :root[data-ios-glass="on"] .menu-item:active {
   background:var(--surface-2);
+}
+
+/* Static glass cards only need layered paints, not one expensive live blur
+ * compositor surface per card. Preserve genuine blur for fixed navigation,
+ * sheets, timers and the sticky workout header. */
+:root[data-ios-glass="on"] .card,
+:root[data-ios-glass="on"] .tile,
+:root[data-ios-glass="on"] .sect-b {
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
 }
 
 /* Critical accessibility and fallback: disable stacked filters, restore solid
