@@ -17,6 +17,11 @@ permissions:
 
 jobs:
   cla:
+    # The upstream CLA applies to contributions to DuarteSantos8/openGym.
+    # This personal fork's internal customization PRs do not need upstream CLA signatures.
+    # pull_request_target reads the DEFAULT branch, so this takes effect for future PRs
+    # after a reviewed merge; existing PR checks still use the current main version.
+    if: github.repository == 'DuarteSantos8/openGym'
     runs-on: ubuntu-latest
     steps:
       # Comments on plain issues (the pinned CLA issue #554) are not pull requests: the action
