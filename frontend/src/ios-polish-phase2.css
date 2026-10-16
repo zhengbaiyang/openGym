@@ -1,0 +1,352 @@
+/*
+ * iOS 27 final-screen refinement: workout, plan, exercise catalogue,
+ * metrics, settings and user-facing feedback.
+ *
+ * Deliberately changes PAINT / hierarchy rather than workout inputs' widths,
+ * hitboxes, reorder transforms, sticky geometry or fixed floating-dock offsets.
+ * Import only after index.css, ios-glass.css and ios-polish.css.
+ * Every selector must remain scoped to the native iOS marker.
+ */
+
+/* Small purposeful progress reading for a week, not a second business model. */
+:root[data-ios-glass="on"] .ios-home-week-progress {
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin:7px 2px 16px;
+  padding:10px 12px 11px;
+  background:var(--ios-control);
+  border:1px solid color-mix(in srgb,var(--ios-edge) 72%,transparent);
+  border-radius:14px;
+}
+:root[data-ios-glass="on"] .ios-home-week-progress-line {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:12px;
+  letter-spacing:.01em;
+  color:var(--label-2);
+}
+:root[data-ios-glass="on"] .ios-home-week-progress-line strong {
+  color:var(--label);
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+  font-weight:650;
+}
+:root[data-ios-glass="on"] .ios-home-week-progress-track {
+  width:100%;
+  height:5px;
+  background:color-mix(in srgb,var(--label) 11%,transparent);
+  overflow:hidden;
+  border-radius:99px;
+}
+:root[data-ios-glass="on"] .ios-home-week-progress-track i {
+  display:block;
+  height:100%;
+  background:var(--acc);
+  border-radius:inherit;
+  transition:width var(--med) var(--ease);
+}
+
+/* Workout launch: clear priority for today's plan, alternative routines and
+ * freestyle. All buttons keep their upstream onClick handlers. */
+:root[data-ios-glass="on"] .ios-workout-start .ios-workout-start-primary {
+  background:
+    radial-gradient(ellipse 110% 110% at 90% 0%, color-mix(in srgb,var(--acc) 19%,transparent), transparent 68%),
+    linear-gradient(135deg,var(--ios-lustre),transparent 67%),
+    var(--ios-panel-base);
+  border-color:color-mix(in srgb,var(--acc) 38%,var(--ios-edge));
+  border-top-color:color-mix(in srgb,var(--acc) 54%,var(--ios-edge-strong));
+}
+:root[data-ios-glass="on"] .ios-workout-start-primary .big {
+  font-size:clamp(23px,6vw,31px);
+  font-weight:700;
+  letter-spacing:-.032em;
+}
+:root[data-ios-glass="on"] .ios-workout-start .list .item {
+  border-color:var(--ios-edge);
+}
+:root[data-ios-glass="on"] .ios-workout-start .list .item:active {
+  border-color:var(--acc-line);
+  background:var(--surface-2);
+}
+
+/* Running workout: the sticky header needs a crisp optical separation between
+ * scrolling sets and the timer, without any changes to its sticky top/margins. */
+:root[data-ios-glass="on"] .whdr.stick {
+  background:color-mix(in srgb,var(--bg) 94%,transparent);
+  -webkit-backdrop-filter:saturate(155%) blur(20px);
+  backdrop-filter:saturate(155%) blur(20px);
+  border-bottom:1px solid var(--ios-edge);
+  box-shadow:0 10px 26px -20px rgba(0,0,0,.65);
+}
+:root[data-ios-glass="on"] .whdr-name {
+  letter-spacing:-.018em;
+  font-weight:680;
+}
+:root[data-ios-glass="on"] .whdr-mid .sub {
+  color:var(--label-2);
+}
+:root[data-ios-glass="on"] .wprog {
+  height:5px;
+  background:var(--ios-control);
+  border:1px solid color-mix(in srgb,var(--ios-edge) 58%,transparent);
+  border-radius:99px;
+}
+:root[data-ios-glass="on"] .wprog i {
+  background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 67%,white));
+}
+:root[data-ios-glass="on"] .whdr-finish {
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13);
+}
+:root[data-ios-glass="on"] .wl-unit {
+  border:1px solid var(--ios-edge);
+  border-top-color:var(--ios-edge-strong);
+  border-radius:23px;
+  background:
+    radial-gradient(ellipse 100% 90% at 0% 0%,var(--ios-lustre-fade),transparent 83%),
+    var(--ios-panel-base);
+  box-shadow:var(--ios-shadow-soft);
+}
+:root[data-ios-glass="on"] .wl-unit.cur {
+  border-color:color-mix(in srgb,var(--acc) 42%,var(--ios-edge));
+  box-shadow:inset 0 0 0 1px var(--acc-line),var(--ios-shadow-soft);
+}
+:root[data-ios-glass="on"] .wl-hd {
+  color:var(--label-2);
+}
+:root[data-ios-glass="on"] .ss-card {
+  border:1px solid color-mix(in srgb,var(--acc) 30%,var(--ios-edge));
+  border-radius:19px;
+  background:var(--ios-panel-base);
+  box-shadow:inset 0 1px 0 var(--ios-lustre-fade);
+}
+:root[data-ios-glass="on"] .ss-hd {
+  color:var(--acc);
+  letter-spacing:.024em;
+}
+:root[data-ios-glass="on"] .exmedia {
+  border:1px solid var(--ios-edge);
+  border-radius:18px;
+  /* Exercise animations should stay clear and NEVER be blurred. */
+}
+:root[data-ios-glass="on"] .wthumb,
+:root[data-ios-glass="on"] .wthumb .thumb {
+  border-radius:13px;
+}
+:root[data-ios-glass="on"] .sethead {
+  color:var(--label-2);
+  letter-spacing:.07em;
+}
+:root[data-ios-glass="on"] .setrow .n,
+:root[data-ios-glass="on"] .setrow-side>.n {
+  background:var(--ios-control);
+  border:1px solid var(--ios-edge);
+}
+:root[data-ios-glass="on"] .setrow.done .n,
+:root[data-ios-glass="on"] .setrow.side.done .sidetag {
+  border-color:transparent;
+  background:var(--acc);
+  color:var(--on-acc);
+}
+/* Keep the stepper's existing flex floor, min-width and button widths intact —
+ * exact 320–430px fit is more important than a larger decorative control. */
+:root[data-ios-glass="on"] .setrow .stp,
+:root[data-ios-glass="on"] .effcell,
+:root[data-ios-glass="on"] .effcell-stp {
+  background:color-mix(in srgb,var(--ios-control) 88%,var(--surface-2));
+  border:1px solid var(--ios-edge);
+  border-radius:11px;
+}
+:root[data-ios-glass="on"] .setrow .stp .num:focus-visible {
+  outline:1.5px solid var(--acc);
+  outline-offset:-2px;
+  border-radius:5px;
+}
+:root[data-ios-glass="on"] .setrow .stp button:active {
+  background:var(--surface-3);
+}
+:root[data-ios-glass="on"] .setrow .ck {
+  border-color:var(--ios-edge-strong);
+}
+:root[data-ios-glass="on"] .setrow .ck.on {
+  border-color:transparent;
+}
+:root[data-ios-glass="on"] .workout-swipe-preview,
+:root[data-ios-glass="on"] .workout-swipe-card {
+  background:transparent;
+}
+/* Undo swipe pane stays opaque for reliable contrast while moving. */
+:root[data-ios-glass="on"] .swrow .swfront {
+  background:var(--ios-panel-base);
+}
+
+/* Session and rest timer keep visual hierarchy across normal, working, paused,
+ * and countdown states, without animating expensive background blur each second. */
+:root[data-ios-glass="on"] #timer {
+  border:1px solid var(--ios-edge-strong);
+  background:var(--glass-deep);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  backdrop-filter:blur(20px) saturate(160%);
+}
+:root[data-ios-glass="on"] #timer .bar {
+  background:var(--ios-control);
+}
+:root[data-ios-glass="on"] #timer .t {
+  letter-spacing:-.042em;
+}
+:root[data-ios-glass="on"] #timer .acts .btn {
+  box-shadow:none;
+}
+
+/* Plan surfaces: emphasize active day and loop state while respecting drag/swap. */
+:root[data-ios-glass="on"] .plan .plan-mode .sect-b {
+  background:var(--ios-panel-base);
+}
+:root[data-ios-glass="on"] .plan .plan-day {
+  border-radius:18px;
+}
+:root[data-ios-glass="on"] .plan .plan-day:has(.plan-day-n.today) {
+  background:
+    linear-gradient(108deg,color-mix(in srgb,var(--acc) 9%,transparent),transparent 65%),
+    var(--ios-list-base);
+  border-color:color-mix(in srgb,var(--acc) 27%,var(--ios-edge));
+}
+:root[data-ios-glass="on"] .plan .plan-day-n.today {
+  color:var(--acc);
+  font-weight:700;
+}
+:root[data-ios-glass="on"] .plan .plan-order.next {
+  box-shadow:0 3px 13px -6px var(--acc);
+}
+:root[data-ios-glass="on"] .plan .plan-routines .item {
+  border-radius:19px;
+}
+:root[data-ios-glass="on"] .plan .sec,
+:root[data-ios-glass="on"] .plan .sect-t {
+  letter-spacing:.025em;
+}
+
+/* Statistics: distinguish quantitative data from ordinary list body text. */
+:root[data-ios-glass="on"] .tile {
+  position:relative;
+  overflow:hidden;
+}
+:root[data-ios-glass="on"] .tile::after {
+  content:"";
+  position:absolute;
+  inset-inline:16px;
+  height:1px;
+  top:0;
+  background:linear-gradient(90deg,transparent,var(--ios-edge-strong),transparent);
+  pointer-events:none;
+}
+:root[data-ios-glass="on"] .tiles .tile .v {
+  font-feature-settings:"tnum" 1;
+}
+:root[data-ios-glass="on"] .hm-wrap,
+:root[data-ios-glass="on"] .chart {
+  max-width:100%;
+}
+:root[data-ios-glass="on"] .mrow {
+  border-radius:11px;
+}
+:root[data-ios-glass="on"] #weekly-volume {
+  scroll-margin-top:calc(var(--sat) + var(--conn) + 108px);
+}
+
+/* Catalogue: one discernible tactile target per exercise and stronger separation
+ * between filter state and passive tags. Do not alter the 50px thumb geometry. */
+:root[data-ios-glass="on"] .ios-exercise-library .search-row {
+  margin-bottom:12px;
+}
+:root[data-ios-glass="on"] .ios-exercise-library .search {
+  isolation:isolate;
+}
+:root[data-ios-glass="on"] .ios-exercise-library .search-row>.ex-view-btn {
+  box-shadow:inset 0 1px 0 var(--ios-lustre-fade);
+  border-radius:16px;
+}
+:root[data-ios-glass="on"] .ios-exercise-library .chips .chip.on {
+  box-shadow:0 4px 15px -9px var(--acc);
+}
+:root[data-ios-glass="on"] .ios-exercise-library .list .item {
+  border-radius:18px;
+  min-height:70px;
+  transition:background var(--fast),border-color var(--fast);
+}
+:root[data-ios-glass="on"] .ios-exercise-library .list .item:active {
+  background:var(--surface-2);
+  border-color:color-mix(in srgb,var(--acc) 31%,var(--ios-edge));
+}
+:root[data-ios-glass="on"] .ios-exercise-library .ex-new {
+  background:color-mix(in srgb,var(--acc) 6%,var(--ios-list-base));
+  border-style:dashed;
+}
+:root[data-ios-glass="on"] .ios-exercise-library .ex-grid .item {
+  overflow:hidden;
+}
+
+/* Settings is still an iOS grouped list (not a desktop settings panel). */
+:root[data-ios-glass="on"] .sp-root-title {
+  font-weight:700;
+  letter-spacing:-.044em;
+}
+:root[data-ios-glass="on"] .sp-nav {
+  border-bottom:1px solid color-mix(in srgb,var(--ios-edge) 63%,transparent);
+  padding-bottom:8px;
+}
+:root[data-ios-glass="on"] .sp-back {
+  border-radius:12px;
+}
+:root[data-ios-glass="on"] .sp-back:active {
+  background:var(--ios-control);
+}
+:root[data-ios-glass="on"] .sect-b .lrow {
+  color:var(--label);
+  transition:background var(--fast);
+}
+:root[data-ios-glass="on"] .sect-b .lrow:active {
+  background:color-mix(in srgb,var(--acc) 6%,var(--ios-control));
+}
+:root[data-ios-glass="on"] .sp-avatar {
+  box-shadow:inset 0 1px 0 var(--ios-lustre-fade);
+}
+:root[data-ios-glass="on"] .menu-group.grouped .menu-list {
+  background:var(--ios-panel-base);
+  border:1px solid var(--ios-edge);
+  border-radius:19px;
+}
+:root[data-ios-glass="on"] .menu-item:active {
+  background:var(--surface-2);
+}
+
+/* Critical accessibility and fallback: disable stacked filters, restore solid
+ * surfaces and preserve native safe areas. */
+@media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
+  :root[data-ios-glass="on"] .ios-workout-start .ios-workout-start-primary,
+  :root[data-ios-glass="on"] .wl-unit,
+  :root[data-ios-glass="on"] .ss-card,
+  :root[data-ios-glass="on"] .menu-group.grouped .menu-list {
+    background:var(--surface);
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+  :root[data-ios-glass="on"] .whdr.stick,
+  :root[data-ios-glass="on"] #timer {
+    background:var(--bg-el);
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+  :root[data-ios-glass="on"] .setrow .stp,
+  :root[data-ios-glass="on"] .effcell,
+  :root[data-ios-glass="on"] .effcell-stp {
+    background:var(--surface-2);
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  :root[data-ios-glass="on"] .ios-home-week-progress-track i,
+  :root[data-ios-glass="on"] .ios-exercise-library .list .item {
+    transition:none;
+  }
+}
