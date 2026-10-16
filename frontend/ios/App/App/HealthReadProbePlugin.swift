@@ -2,13 +2,16 @@ import Foundation
 import Capacitor
 import HealthKit
 
-/// Device availability check only. iOS has no supported public API equivalent to the
-/// macOS-only SecTask entitlement inspection API. Do NOT claim that a successful result
-/// establishes a HealthKit entitlement, authorization, or access to any health records.
-///
-/// This diagnostic performs no HealthKit authorization requests or data queries.
+/// Device availability only. No authorization request, HealthKit reads or writes.
+/// A true availability result does NOT verify HealthKit signing entitlements.
 @objc(HealthReadProbePlugin)
-public class HealthReadProbePlugin: CAPPlugin {
+public class HealthReadProbePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "HealthReadProbePlugin"
+    public let jsName = "HealthReadProbe"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "inspect", returnType: CAPPluginReturnPromise)
+    ]
+
     @objc func inspect(_ call: CAPPluginCall) {
         call.resolve([
             "available": HKHealthStore.isHealthDataAvailable(),
