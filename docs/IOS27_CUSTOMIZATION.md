@@ -27,6 +27,13 @@ This branch contains **work in progress**, not a release IPA. `main` must remain
 - Validate both light and dark appearances and the iOS 27 accessibility options for reduced transparency and increased contrast.
 - The user may still use a third-party signing app; **HealthKit entitlement support must be verified on device**. If unsupported, the UI-only IPA releases without any HealthKit prompt, while the health implementation remains gated.
 
+## Capacitor 7 local plugin repair — iPhone runtime regression
+- Real iPhone reported `"HealthReadProbe" plugin is not implemented on ios` even though the prior unsigned IPA passed Xcode compilation. It is a **native bridge registration** failure, not a HealthKit denial.
+- Both `HealthReadProbePlugin` and `PrintPlugin` now adopt `CAPBridgedPlugin` with `identifier`, matching JS `jsName` and `pluginMethods` metadata. The old Objective-C `CAP_PLUGIN` files were removed from the app target and repository.
+- `AppBridgeViewController.swift` registers both plugin instances in `capacitorDidLoad()`; `Base.lproj/Main.storyboard` points at that subclass, with Xcode project Compile Sources wiring.
+- `frontend/src/lib/ios-native-bridge.test.js` checks the registration contract and project wiring to prevent a recurrence.
+- This is still a **device-availability-only** diagnostic. The app does not request access to Apple Health or use HealthKit entitlements in the default UI-only IPA. Native runtime behavior must be verified **after signing the latest IPA** on the user's iPhone.
+
 ## HealthKit signing probe slice (October 2026)
 - Added `HealthReadProbePlugin.swift` and its Capacitor Objective-C registration; these use public `HKHealthStore.isHealthDataAvailable()` only. iOS does **not** expose the macOS `SecTask` entitlement inspector, so the app cannot infer signing permission from device availability. No permission prompt or health sample query is implemented in this slice.
 - Added the iOS-only Apple Health entry on Home and Stats plus a dedicated readiness screen. Android and browser navigation remain unchanged. The five bottom tabs remain as before.
