@@ -100,26 +100,23 @@
   box-shadow:inset 0 1px 0 rgba(255,255,255,.13);
 }
 :root[data-ios-glass="on"] .wl-unit {
-  border:1px solid var(--ios-edge);
-  border-top-color:var(--ios-edge-strong);
+  /* Use inset edge: a 1px real border can starve tightly sized set rows. */
   border-radius:23px;
   background:
     radial-gradient(ellipse 100% 90% at 0% 0%,var(--ios-lustre-fade),transparent 83%),
     var(--ios-panel-base);
-  box-shadow:var(--ios-shadow-soft);
+  box-shadow:inset 0 0 0 1px var(--ios-edge),var(--ios-shadow-soft);
 }
 :root[data-ios-glass="on"] .wl-unit.cur {
-  border-color:color-mix(in srgb,var(--acc) 42%,var(--ios-edge));
-  box-shadow:inset 0 0 0 1px var(--acc-line),var(--ios-shadow-soft);
+  box-shadow:inset 0 0 0 1.5px var(--acc-line),var(--ios-shadow-soft);
 }
 :root[data-ios-glass="on"] .wl-hd {
   color:var(--label-2);
 }
 :root[data-ios-glass="on"] .ss-card {
-  border:1px solid color-mix(in srgb,var(--acc) 30%,var(--ios-edge));
   border-radius:19px;
   background:var(--ios-panel-base);
-  box-shadow:inset 0 1px 0 var(--ios-lustre-fade);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 30%,var(--ios-edge));
 }
 :root[data-ios-glass="on"] .ss-hd {
   color:var(--acc);
@@ -151,11 +148,15 @@
 }
 /* Keep the stepper's existing flex floor, min-width and button widths intact —
  * exact 320–430px fit is more important than a larger decorative control. */
-:root[data-ios-glass="on"] .setrow .stp,
+:root[data-ios-glass="on"] .setrow .stp {
+  background:color-mix(in srgb,var(--ios-control) 88%,var(--surface-2));
+  box-shadow:inset 0 0 0 1px var(--ios-edge);
+  border-radius:11px;
+}
 :root[data-ios-glass="on"] .effcell,
 :root[data-ios-glass="on"] .effcell-stp {
   background:color-mix(in srgb,var(--ios-control) 88%,var(--surface-2));
-  border:1px solid var(--ios-edge);
+  border-color:var(--ios-edge);
   border-radius:11px;
 }
 :root[data-ios-glass="on"] .setrow .stp .num:focus-visible {
