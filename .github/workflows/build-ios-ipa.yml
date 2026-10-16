@@ -1,4 +1,4 @@
-name: Build original openGym iOS unsigned IPA
+name: Build iOS 27 openGym unsigned IPA
 
 on:
   workflow_dispatch:
@@ -8,12 +8,12 @@ permissions:
 
 jobs:
   ios-unsigned-ipa:
-    name: Build unsigned iPhone IPA (original openGym)
-    runs-on: macos-15
+    name: Build unsigned iPhone IPA (Xcode 27)
+    runs-on: xcode-27
     timeout-minutes: 90
 
     steps:
-      - name: Checkout the original openGym source
+      - name: Checkout openGym customization source
         uses: actions/checkout@v4
 
       - name: Configure Node.js
@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Verify Apple toolchain
+      - name: Verify Xcode 27 Apple toolchain
         run: |
           xcodebuild -version
           pod --version
