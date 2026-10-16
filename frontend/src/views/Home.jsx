@@ -124,6 +124,20 @@ export default function Home() {
         </div>
         <div className="week">{strip}</div>
       </>}
+      {/* Visual-only progress summary: the existing weekTally is the single source of
+          truth, so this card does not introduce a competing workout calculation. */}
+      <div className="ios-home-week-progress" role="group" aria-label={t('This week')}>
+        <div className="ios-home-week-progress-line">
+          <span>{t('This week')}</span>
+          <strong>{doneThisWeek}{plannedPerWeek ? ' / ' + plannedPerWeek : ''}</strong>
+        </div>
+        {plannedPerWeek > 0 && <div className="ios-home-week-progress-track"
+          role="progressbar" aria-label={t('This week')}
+          aria-valuemin={0} aria-valuemax={plannedPerWeek}
+          aria-valuenow={Math.min(doneThisWeek, plannedPerWeek)}>
+          <i style={{ width: Math.min(100, doneThisWeek / plannedPerWeek * 100) + '%' }} />
+        </div>}
+      </div>
       {/* Once today's session is logged the row stops asking for it. The week strip already
           knew (its dot goes 'done'); this row did not, so a finished day kept showing the
           routine name behind a green Start tag and read as still outstanding (issue #4).
