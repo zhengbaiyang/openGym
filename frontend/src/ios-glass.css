@@ -44,12 +44,14 @@
 
 /* Floating capsule, detached from the home indicator, sized for narrow iPhones. */
 :root[data-ios-glass="on"] #tabbar {
-  left: 50%;
-  right: auto;
-  inset-inline-start: auto;
-  inset-inline-end: auto;
+  /* Anchor both edges and let auto margins do the centering. Mixing left:50%
+     with logical inset-inline-start:auto left the bar at x=0 on iOS 27, while
+     translateX(-50%) still moved it halfway off-screen. */
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  margin-inline: auto;
   bottom: calc(10px + var(--sab));
-  transform: translateX(-50%);
+  transform: none;
   width: calc(100% - 28px);
   max-width: 530px;
   padding: 8px 7px 9px;
@@ -99,6 +101,12 @@
 :root[data-ios-glass="on"] #tabbar .tab-dot {
   top: 2px;
   right: 3px;
+}
+
+/* Room to scroll the last card above the raised Start tab. The existing resting
+   and workout-page reserves remain authoritative. */
+:root[data-ios-glass="on"] body:not(.no-tabbar):not(.resting) #app {
+  padding-bottom: calc(124px + var(--sab));
 }
 
 /* Glass as a layer, not a translucent film over workout numbers. */
