@@ -1,6 +1,6 @@
 /*
  * iPhone-only visual layer for the zhengbaiyang openGym fork.
- * This is a high-fidelity WebView approximation of the iOS 26 glass language;
+ * This is a high-fidelity WebView approximation of the iOS 27 glass visual language, compatible with iOS 15.5+;
  * CSS blur is NOT UIKit/SwiftUI's native Liquid Glass material.
  * Enabled only on <html data-ios-glass="on">, set after the Capacitor platform check.
  * Keep inputs, readable data, and overlays functional on iOS 15.5+.
@@ -206,4 +206,23 @@
 @media (prefers-reduced-motion: reduce) {
   :root[data-ios-glass="on"] #tabbar button .tab-ic,
   :root[data-ios-glass="on"] .item { transition: none; }
+}
+
+/* iOS 27's increased contrast preference: opaque data surfaces and stronger edges. */
+@media (prefers-contrast: more) {
+  :root[data-ios-glass="on"] {
+    --glass-border: var(--label-2);
+    --glass-fill: var(--surface);
+    --glass-deep: var(--bg-el);
+  }
+  :root[data-ios-glass="on"] #tabbar button {
+    color: var(--label);
+  }
+  :root[data-ios-glass="on"] .card,
+  :root[data-ios-glass="on"] .tile,
+  :root[data-ios-glass="on"] .sect-b,
+  :root[data-ios-glass="on"] .item {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
