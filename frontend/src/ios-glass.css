@@ -1,0 +1,209 @@
+/*
+ * iPhone-only visual layer for the zhengbaiyang openGym fork.
+ * This is a high-fidelity WebView approximation of the iOS 26 glass language;
+ * CSS blur is NOT UIKit/SwiftUI's native Liquid Glass material.
+ * Enabled only on <html data-ios-glass="on">, set after the Capacitor platform check.
+ * Keep inputs, readable data, and overlays functional on iOS 15.5+.
+ */
+:root[data-ios-glass="on"] {
+  --r-sm: 12px;
+  --r: 16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --r-card: 24px;
+  --glass-fill: rgba(31, 42, 60, .67);
+  --glass-deep: rgba(26, 35, 53, .89);
+  --glass-border: rgba(255, 255, 255, .20);
+  --glass-glint: rgba(255, 255, 255, .13);
+  --glass-shadow: 0 15px 38px rgba(0, 0, 0, .23);
+  --glass-backdrop: saturate(160%) blur(18px);
+}
+
+:root[data-ios-glass="on"][data-theme="light"] {
+  --glass-fill: rgba(255, 255, 255, .70);
+  --glass-deep: rgba(246, 250, 255, .92);
+  --glass-border: rgba(255, 255, 255, .90);
+  --glass-glint: rgba(255, 255, 255, .82);
+  --glass-shadow: 0 14px 42px rgba(64, 102, 155, .14);
+}
+
+:root[data-ios-glass="on"] body {
+  background:
+    radial-gradient(ellipse 90% 34% at 88% 5%, rgba(74, 115, 186, .24), transparent 74%),
+    radial-gradient(ellipse 90% 46% at 4% 70%, rgba(63, 174, 173, .13), transparent 79%),
+    var(--bg);
+  background-attachment: fixed;
+}
+:root[data-ios-glass="on"][data-theme="light"] body {
+  background:
+    radial-gradient(ellipse 90% 38% at 86% 4%, rgba(122, 175, 239, .27), transparent 76%),
+    radial-gradient(ellipse 80% 55% at 3% 76%, rgba(179, 153, 255, .15), transparent 78%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* Floating capsule, detached from the home indicator, sized for narrow iPhones. */
+:root[data-ios-glass="on"] #tabbar {
+  left: 50%;
+  right: auto;
+  inset-inline-start: auto;
+  inset-inline-end: auto;
+  bottom: calc(10px + var(--sab));
+  transform: translateX(-50%);
+  width: calc(100% - 28px);
+  max-width: 530px;
+  padding: 8px 7px 9px;
+  align-items: center;
+  border: 1px solid var(--glass-border);
+  border-radius: 31px;
+  background: var(--glass-deep);
+  -webkit-backdrop-filter: saturate(180%) blur(25px);
+  backdrop-filter: saturate(180%) blur(25px);
+  box-shadow: 0 5px 0 rgba(255,255,255,.035) inset, var(--glass-shadow);
+  isolation: isolate;
+}
+:root[data-ios-glass="on"] #tabbar button {
+  min-width: 0;
+  min-height: 55px;
+  gap: 2px;
+  font-size: 10px;
+  color: var(--label-2);
+  border-radius: 19px;
+}
+:root[data-ios-glass="on"] #tabbar button .tab-ic {
+  width: 43px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  transition: background var(--med) var(--ease), border-color var(--med);
+}
+:root[data-ios-glass="on"] #tabbar button.on:not(.start) .tab-ic {
+  background: var(--acc-soft);
+  border-color: color-mix(in srgb, var(--acc) 25%, transparent);
+  border-radius: 15px;
+}
+:root[data-ios-glass="on"] #tabbar button:not(.start) .icn {
+  font-size: 23px;
+}
+:root[data-ios-glass="on"] #tabbar button.start {
+  margin-top: -17px;
+}
+:root[data-ios-glass="on"] #tabbar button.start .cir {
+  width: 54px;
+  height: 54px;
+  border: 2px solid rgba(255,255,255,.25);
+  box-shadow: 0 0 0 5px var(--glass-deep), 0 8px 22px color-mix(in srgb, var(--acc) 35%, transparent);
+}
+:root[data-ios-glass="on"] #tabbar .tab-dot {
+  top: 2px;
+  right: 3px;
+}
+
+/* Glass as a layer, not a translucent film over workout numbers. */
+:root[data-ios-glass="on"] .card,
+:root[data-ios-glass="on"] .tile,
+:root[data-ios-glass="on"] .sect-b,
+:root[data-ios-glass="on"] .item {
+  background: linear-gradient(154deg, var(--glass-glint), transparent 67%), var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-card);
+  box-shadow: 0 4px 22px rgba(0,0,0,.07), 0 1px 0 rgba(255,255,255,.045) inset;
+}
+:root[data-ios-glass="on"] .card,
+:root[data-ios-glass="on"] .tile,
+:root[data-ios-glass="on"] .sect-b {
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  backdrop-filter: var(--glass-backdrop);
+}
+:root[data-ios-glass="on"] .item {
+  transition: background var(--fast), transform var(--fast) var(--ease);
+}
+:root[data-ios-glass="on"] .item:active {
+  background: var(--surface-2);
+  transform: scale(.988);
+}
+:root[data-ios-glass="on"] .sect-b {
+  overflow: hidden;
+}
+:root[data-ios-glass="on"] .lrow.tap:active {
+  background: color-mix(in srgb, var(--label) 9%, transparent);
+}
+:root[data-ios-glass="on"] .iconbtn {
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+}
+:root[data-ios-glass="on"] .hdr h1 {
+  letter-spacing: -.035em;
+}
+:root[data-ios-glass="on"] .tile .v,
+:root[data-ios-glass="on"] .stat-v,
+:root[data-ios-glass="on"] .card .big {
+  letter-spacing: -.04em;
+}
+
+/* Modal material remains opaque enough to keep settings and text fields readable. */
+:root[data-ios-glass="on"] .sheet,
+:root[data-ios-glass="on"] .center {
+  background: var(--glass-deep);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: saturate(165%) blur(28px);
+  backdrop-filter: saturate(165%) blur(28px);
+  box-shadow: var(--glass-shadow);
+}
+:root[data-ios-glass="on"] .sheet {
+  border-radius: 30px 30px 0 0;
+  border-bottom: 0;
+}
+:root[data-ios-glass="on"] .center {
+  border-radius: 26px;
+}
+:root[data-ios-glass="on"] .picker-search {
+  background: var(--glass-deep);
+}
+:root[data-ios-glass="on"] .sheet .grab {
+  background: var(--label-3);
+  width: 38px;
+}
+
+/* Sheet inputs and dense workout editors keep solid, legible control backgrounds. */
+:root[data-ios-glass="on"] input,
+:root[data-ios-glass="on"] textarea,
+:root[data-ios-glass="on"] select,
+:root[data-ios-glass="on"] .stp,
+:root[data-ios-glass="on"] .seg {
+  color: var(--label);
+}
+
+/* iOS accessibility: fallback to true opacity; reduced motion is also handled by index.css. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root[data-ios-glass="on"] #tabbar,
+  :root[data-ios-glass="on"] .sheet,
+  :root[data-ios-glass="on"] .center { background: var(--bg-el); }
+  :root[data-ios-glass="on"] .card,
+  :root[data-ios-glass="on"] .tile,
+  :root[data-ios-glass="on"] .sect-b,
+  :root[data-ios-glass="on"] .item { background: var(--surface); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-ios-glass="on"] #tabbar,
+  :root[data-ios-glass="on"] .sheet,
+  :root[data-ios-glass="on"] .center,
+  :root[data-ios-glass="on"] .card,
+  :root[data-ios-glass="on"] .tile,
+  :root[data-ios-glass="on"] .sect-b,
+  :root[data-ios-glass="on"] .item {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--surface);
+  }
+  :root[data-ios-glass="on"] #tabbar,
+  :root[data-ios-glass="on"] .sheet,
+  :root[data-ios-glass="on"] .center { background: var(--bg-el); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-ios-glass="on"] #tabbar button .tab-ic,
+  :root[data-ios-glass="on"] .item { transition: none; }
+}
