@@ -83,7 +83,7 @@ jobs:
       - name: Upload unsigned IPA for signing in 全能签
         uses: actions/upload-artifact@v4
         with:
-          name: openGym-original-iOS-unsigned-IPA
+          name: openGym-iOS27-unsigned-IPA
           path: artifacts/openGym-*-unsigned.ipa*
           if-no-files-found: error
           retention-days: 30
