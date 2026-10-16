@@ -26,7 +26,10 @@ export async function isNativeIOS() {
 
 export async function inspectIOSHealthKit() {
   if (!await isNativeIOS()) return { available: false, signingVerified: false, readOnly: true, permissionRequested: false }
-  const { registerPlugin } = await import('@capacitor/core')
+  const { Capacitor, registerPlugin } = await import('@capacitor/core')
+  if (!Capacitor.isPluginAvailable('HealthReadProbe')) {
+    throw new Error('The installed iOS app does not contain the Apple Health native bridge. Update to the latest IPA.')
+  }
   const native = registerPlugin('HealthReadProbe')
   const state = await native.inspect()
   if (typeof state?.available !== 'boolean') throw new Error('Unexpected Apple Health diagnostic response')
