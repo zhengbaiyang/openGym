@@ -62,6 +62,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSHealthShareUsageDescription</key>
+	<string>With your permission, openGym reads Apple Watch workout sessions from Apple Health and saves a private on-device history. It never writes to Apple Health or uploads imported health information.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to scan your gym membership QR code, and to take a photo or video of an exercise you add yourself.</string>
 	<key>NSMicrophoneUsageDescription</key>
