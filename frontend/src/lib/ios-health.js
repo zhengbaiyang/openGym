@@ -1,6 +1,7 @@
-/* iOS HealthKit capability probe, not health-data synchronization.
- * In this first gated slice there is NO read permission prompt, sample query,
- * local import, server sync or HealthKit write method.
+/* iOS HealthKit device availability diagnostic, not health-data synchronization.
+ * iOS does not expose the signed process's HealthKit entitlements through a
+ * supported public inspection API. Never interpret health availability as signing
+ * compatibility. No authorization request, sample read or write occurs here.
  */
 import { MOBILE } from './mobile.js'
 
@@ -8,10 +9,9 @@ export const nativeIOS = ({ mobile, platform, native }) =>
   mobile === true && platform === 'ios' && native === true
 
 export function healthCapabilityMessage(status) {
-  if (!status) return 'Could not check the HealthKit configuration.'
+  if (!status) return 'Could not check Apple Health availability.'
   if (!status.available) return 'Apple Health is available only on supported iPhone devices.'
-  if (!status.entitled) return 'This signed build does not have the required HealthKit entitlement. Use the UI-only version until a compatible signing profile is available.'
-  return 'HealthKit entitlement detected. Read-only workout import is being implemented; no health data has been accessed yet.'
+  return 'Apple Health is available on this device. HealthKit signing permissions are NOT verified. Importing workouts will require an appropriate provisioning profile and your read authorization.'
 }
 
 export async function isNativeIOS() {
@@ -25,12 +25,10 @@ export async function isNativeIOS() {
 }
 
 export async function inspectIOSHealthKit() {
-  if (!await isNativeIOS()) return { available: false, entitled: false, readOnly: true, permissionRequested: false }
+  if (!await isNativeIOS()) return { available: false, signingVerified: false, readOnly: true, permissionRequested: false }
   const { registerPlugin } = await import('@capacitor/core')
   const native = registerPlugin('HealthReadProbe')
   const state = await native.inspect()
-  if (typeof state?.available !== 'boolean' || typeof state?.entitled !== 'boolean') {
-    throw new Error('Unexpected HealthKit capability response')
-  }
-  return { available: state.available, entitled: state.entitled, readOnly: true, permissionRequested: false }
+  if (typeof state?.available !== 'boolean') throw new Error('Unexpected Apple Health diagnostic response')
+  return { available: state.available, signingVerified: false, readOnly: true, permissionRequested: false }
 }
