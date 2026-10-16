@@ -2,6 +2,16 @@ name: Build iOS 27 openGym unsigned IPA
 
 on:
   workflow_dispatch:
+  # Build the draft iOS customization once the changes are proposed. The original
+  # manually dispatched release build on main remains separate until merge.
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/build-ios-ipa.yml'
+
+concurrency:
+  group: ios27-unsigned-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
