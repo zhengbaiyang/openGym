@@ -1,34 +1,20 @@
 import Foundation
 import Capacitor
 import HealthKit
-import Security
 
-/// Signed-app HealthKit capability probe. This intentionally has NO requestAuthorization,
-/// HKSampleQuery, save or delete methods: an ordinary third-party-signed UI build must
-/// remain installable without accidentally presenting a health-data permission prompt.
+/// Device availability check only. iOS has no supported public API equivalent to the
+/// macOS-only SecTask entitlement inspection API. Do NOT claim that a successful result
+/// establishes a HealthKit entitlement, authorization, or access to any health records.
 ///
-/// Entitlements belong to the App ID + provisioning profile, not to an unsigned IPA.
-/// Checking the CURRENT PROCESS entitlement is useful only after signing on a real iPhone.
+/// This diagnostic performs no HealthKit authorization requests or data queries.
 @objc(HealthReadProbePlugin)
 public class HealthReadProbePlugin: CAPPlugin {
     @objc func inspect(_ call: CAPPluginCall) {
-        let available = HKHealthStore.isHealthDataAvailable()
-        let entitled = Self.hasHealthKitEntitlement()
         call.resolve([
-            "available": available,
-            "entitled": entitled,
+            "available": HKHealthStore.isHealthDataAvailable(),
+            "signingVerified": false,
             "readOnly": true,
             "permissionRequested": false
         ])
-    }
-
-    private static func hasHealthKitEntitlement() -> Bool {
-        guard let task = SecTaskCreateFromSelf(kCFAllocatorDefault),
-              let value = SecTaskCopyValueForEntitlement(
-                task, "com.apple.developer.healthkit" as CFString, nil
-              ) else {
-            return false
-        }
-        return (value as? Bool) == true
     }
 }
