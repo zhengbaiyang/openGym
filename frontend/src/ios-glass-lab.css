@@ -1,0 +1,37 @@
+/* Experiment page only; all presentation scoped to the native iOS shell. */
+:root[data-ios-glass="on"] .ios-native-glass-entry {
+  display:flex;align-items:center;gap:13px;width:100%;min-height:76px;text-align:left;
+  color:var(--label);font:inherit;
+}
+:root[data-ios-glass="on"] .ios-native-glass-entry-icon {
+  display:grid;place-items:center;flex:none;width:44px;height:44px;
+  border-radius:15px;color:var(--label);
+  background:color-mix(in srgb,var(--acc) 16%,var(--ios-control));
+}
+:root[data-ios-glass="on"] .ios-native-glass-entry-copy {
+  display:flex;flex:1;flex-direction:column;gap:3px;min-width:0;
+}
+:root[data-ios-glass="on"] .ios-native-glass-entry-copy strong { font-size:16px; }
+:root[data-ios-glass="on"] .ios-native-glass-entry-copy span {
+  font-size:12px;color:var(--label-2);
+}
+:root[data-ios-glass="on"] .ios-glass-lab { padding-bottom:160px; }
+:root[data-ios-glass="on"] .ios-glass-lab-report { display:grid;gap:12px; }
+:root[data-ios-glass="on"] .ios-glass-lab-report h2 { margin:0; }
+:root[data-ios-glass="on"] .ios-glass-lab-report p { line-height:1.45; }
+:root[data-ios-glass="on"] .ios-glass-lab-tracks { display:grid;gap:18px; }
+:root[data-ios-glass="on"] .ios-glass-lab-tile {
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+  min-height:175px;width:100%;padding:22px;border-radius:29px;
+  background:linear-gradient(130deg,#a9cef5,#4b7aa8 55%,#253954);border:0;
+  text-align:left;color:white;
+}
+:root[data-ios-glass="on"] .ios-glass-lab-tile:nth-child(even) {
+  background:linear-gradient(130deg,#a9e4d7,#348e94 55%,#194358);
+}
+:root[data-ios-glass="on"] .ios-glass-lab-tile strong { font-size:24px; }
+:root[data-ios-glass="on"] .ios-glass-lab-tile small { font-size:14px;line-height:1.4; }
+:root[data-ios-glass="on"] .ios-glass-lab-footnote { padding-block:18px; }
+@media (prefers-reduced-motion:reduce) {
+  :root[data-ios-glass="on"] .ios-glass-lab-tile { transition:none; }
+}
