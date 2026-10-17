@@ -8,6 +8,7 @@ import { bwSheet, goalSheet, dayOverrideSheet, calendarSheet, startFlow, starter
 import LineChart from '../components/LineChart.jsx'
 import Icon from '../components/Icon.jsx'
 import HealthEntry from '../components/HealthEntry.jsx'
+import NativeGlassLabEntry from '../components/NativeGlassLabEntry.jsx'
 import QueueRow from '../components/QueueRow.jsx'
 import { queueOf, queueView, weekTally, pinState } from '../lib/queue.js'
 import { scheduleModeOf } from '../lib/rotation.js'
@@ -108,6 +109,7 @@ export default function Home() {
     </div>
 
     <HealthEntry />
+    <NativeGlassLabEntry />
 
     <div className="card ios-home-week">
       {/* A coach week runs by order, not by weekday, so its progress row stands in for the
