@@ -116,7 +116,12 @@ final class NativeGlassLabOverlay: UIView {
         startButton.accessibilityLabel = "Start"
         startButton.accessibilityIdentifier = "glass-lab-start"
         startButton.accessibilityHint = "Tests the native glass Start control"
+        startButton.addAction(UIAction { [weak self] _ in self?.setStartPressed(true) },
+                              for: [.touchDown, .touchDragEnter])
+        startButton.addAction(UIAction { [weak self] _ in self?.setStartPressed(false) },
+                              for: [.touchDragExit, .touchCancel, .touchUpOutside])
         startButton.addAction(UIAction { [weak self] _ in
+            self?.setStartPressed(false)
             self?.select("start")
         }, for: .touchUpInside)
         glassContainer.contentView.addSubview(startButton)
@@ -259,6 +264,28 @@ final class NativeGlassLabOverlay: UIView {
         }
     }
 
+    /// Start already uses Apple's prominent glass UIButton configuration.
+    /// Its small tactile scale reinforces native material's own press response.
+    private func setStartPressed(_ pressed: Bool) {
+        let update = {
+            self.startButton.transform = pressed
+                ? CGAffineTransform(scaleX: 0.94, y: 0.94)
+                : .identity
+        }
+        if UIAccessibility.isReduceMotionEnabled {
+            update()
+        } else if pressed {
+            UIView.animate(withDuration: 0.10, delay: 0,
+                           options: [.allowUserInteraction, .beginFromCurrentState],
+                           animations: update)
+        } else {
+            UIView.animate(withDuration: 0.24, delay: 0,
+                           usingSpringWithDamping: 0.72, initialSpringVelocity: 0.6,
+                           options: [.allowUserInteraction, .beginFromCurrentState],
+                           animations: update)
+        }
+    }
+
     private func paintTab(_ key: String) {
         guard let button = tabButtons[key], let plate = tabPressPlates[key] else { return }
         let selected = key == selectedKey
@@ -305,6 +332,13 @@ final class NativeGlassLabOverlay: UIView {
         startLabel.textColor = selectedKey == "start" ? .systemGreen : .label
         if selectedKey == "start" { startButton.accessibilityTraits.insert(.selected) }
         else { startButton.accessibilityTraits.remove(.selected) }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            applySelection()
+        }
     }
 
     // The fullscreen, fully transparent host accepts events only in five
