@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { inspectNativeGlassLab, openNativeGlassLab, closeNativeGlassLab, listenNativeGlassLab } from '../lib/native-glass-lab.js'
+import { inspectNativeGlassLab, openNativeGlassLab, closeNativeGlassLab, listenNativeGlassLab, NATIVE_GLASS_STAGE } from '../lib/native-glass-lab.js'
 
 // This page intentionally scrolls visibly behind the *native* glass control.
 // Touching cards scrolls the WebView; touching the glass buttons notifies JS.
@@ -47,7 +47,7 @@ export default function GlassLab() {
       <div className="hdr">
         <div>
           <h1>Native Liquid Glass</h1>
-          <div className="sub">UIKit compositor over a live Capacitor page</div>
+          <div className="sub">{NATIVE_GLASS_STAGE} · UIKit compositor over WebView</div>
         </div>
         <button className="iconbtn" onClick={() => navigate('/home')} aria-label="Back to Home">
           <Icon name="xmark"/>
@@ -55,14 +55,19 @@ export default function GlassLab() {
       </div>
       <section className="card ios-glass-lab-report">
         <h2>Phase 0 · native overlay test</h2>
+        <p className="muted small">Build marker: {NATIVE_GLASS_STAGE}</p>
         <p className="muted">The five controls floating over this page are rendered by UIKit, not CSS. They are a test fixture and do not change your workout or navigate the actual tabs.</p>
         <div role="status" aria-live="polite">
           <strong>UIKit material:</strong> {info?.supported ? 'UIGlassEffect (native)' : 'Not available'}
         </div>
+        <div><strong>Bridge registration:</strong> {info === null ? 'Checking…' : info.bridgeRegistered ? 'Detected' : 'Not detected'}</div>
+        <div><strong>Inspect stage:</strong> {info?.stage || 'Checking…'}</div>
+        <div><strong>Native host:</strong> {info?.hostAttached === undefined ? 'Unknown' : info.hostAttached ? 'Attached' : 'Missing'}</div>
+        {info?.diagnostic && <p className="ios-glass-lab-error" role="alert">Native error: {info.diagnostic}</p>}
         <div><strong>Last native button:</strong> {selected} · {taps} taps</div>
         <div><strong>WebView content taps:</strong> {webTaps}</div>
         {error && <p role="alert">{error}</p>}
-        {!info?.supported && <p className="muted">This version of iOS uses the existing compatible HTML controls.</p>}
+        {info && !info.supported && <p className="muted">The native overlay cannot be displayed. If your phone runs iOS 26+, this indicates a bridge/installation problem rather than normal compatibility behavior. Send a screenshot of this report.</p>}
       </section>
 
       <div className="ios-glass-lab-tracks">
