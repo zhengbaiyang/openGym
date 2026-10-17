@@ -6,6 +6,20 @@ import { useStore } from './store/useStore.js'
 import { startMediaSync } from './lib/media-sync.js'
 import { startNativeKeyboard } from './lib/native-keyboard.js'
 import './index.css'
+import './ios-glass.css'
+import './ios-health.css'
+import './ios-polish.css'
+import './ios-polish-phase2.css'
+import './ios-glass-lab.css'
+import { setIOSGlassPlatform } from './lib/ios-glass.js'
+
+// Mark only the native iOS shell. Safari/PWA and Android retain the upstream UI.
+// Imported CSS is inert until this marker exists, so there is no visual flash on web.
+if (MOBILE) {
+  import('@capacitor/core').then(({ Capacitor }) => {
+    setIOSGlassPlatform(document.documentElement, { mobile: MOBILE, platform: Capacitor.getPlatform() })
+  }).catch(() => {})
+}
 
 // App.jsx restores per-route scroll itself; the browser's own attempt races it.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'

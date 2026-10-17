@@ -1,0 +1,56 @@
+/* iOS-only Apple Health readiness UI. Components are mounted only on native iOS. */
+.ios-health-entry {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  min-height: 82px;
+  margin-bottom: 12px;
+  font: inherit;
+  color: var(--label);
+}
+.ios-health-entry-icon, .ios-health-hero-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  background: color-mix(in srgb, var(--red) 17%, var(--surface));
+  color: var(--red);
+}
+.ios-health-entry-icon {
+  width: 45px; height: 45px; font-size: 25px;
+}
+.ios-health-entry-copy { display:flex; flex:1; flex-direction:column; gap:3px; min-width:0 }
+.ios-health-entry-copy strong { font-size:17px; font-weight:600 }
+.ios-health-entry-copy>span { font-size:13px; color:var(--label-2) }
+.ios-health-entry>.icn { font-size:17px; color:var(--label-2) }
+.ios-health-hero { display:flex; flex-direction:column; align-items:flex-start; gap:13px; padding:22px }
+.ios-health-hero-icon { width:62px; height:62px; border-radius:20px; font-size:34px }
+.ios-health-hero h2, .ios-health-privacy h2 { margin:0 }
+.ios-health-hero p { line-height:1.48 }
+.ios-health-status {
+  display:flex; align-items:flex-start; gap:10px; width:100%;
+  padding:13px; border:1px solid var(--sep-op); border-radius:16px;
+  font-size:14px; line-height:1.45;
+  background:var(--surface-2);
+}
+.ios-health-status .icn { font-size:20px; flex:none; color:var(--blue) }
+.ios-health-privacy { margin-top:14px }
+.ios-health-privacy-row { display:flex; gap:11px; align-items:center; margin:12px 0; font-size:15px }
+.ios-health-privacy-row .icn { flex:none; font-size:21px; color:var(--green) }
+.ios-health-privacy p { margin-top:16px; line-height:1.5 }
+
+.ios-health-actions { display:flex; gap:10px; flex-wrap:wrap; width:100%; }
+.ios-health-actions > .btn { flex:1 1 180px; min-height:48px; }
+.ios-health-history h2 { margin:0; }
+.ios-health-workout {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:15px;
+  padding:15px 0; border-bottom:1px solid var(--sep);
+  font-size:15px;
+}
+.ios-health-workout:last-of-type { border-bottom:0; }
+.ios-health-workout > div:first-child { min-width:0; }
+.ios-health-workout-meta { display:flex; flex-direction:column; text-align:end; align-items:flex-end; gap:4px; flex:none; font-size:13px; }
+.ios-health-workout-meta span { color:var(--label-2) }
+.ios-health-history > p { margin-top:14px; line-height:1.5; }

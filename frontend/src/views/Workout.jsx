@@ -62,9 +62,9 @@ function StartChooser() {
   const todayOvr = S.dayPlan[todayISO()] !== undefined && pinState(S, S.dayPlan[todayISO()]) !== 'done' // a fulfilled pin is no override
   const idSet = new Set(todayIds)
   const others = S.routines.filter(r => !idSet.has(r.id))
-  return <div className="narrow">
+  return <div className="narrow ios-workout-start">
     <div className="hdr"><div><h1>{t('Start workout')}</h1><div className="sub">{t(DAYN[new Date().getDay()])} · {todayRoutines.length ? t('today is {0}', todayName) : t('rest day, but no one’s stopping you')}</div></div></div>
-    {todayRoutines.length > 0 && <div className="card" style={{ borderColor: 'var(--acc)' }}>
+    {todayRoutines.length > 0 && <div className="card ios-workout-start-primary" style={{ borderColor: 'var(--acc)' }}>
       <h2 className="accent">{t("Today's plan")}{todayOvr ? ' · ' + t('rescheduled') : ''}</h2>
       <div className="row between" style={{ marginBottom: 12 }}>
         <div><div className="big">{todayName}</div><div className="muted small">{exCount(todayRoutines.reduce((n, r) => n + r.ex.length, 0))}</div></div>

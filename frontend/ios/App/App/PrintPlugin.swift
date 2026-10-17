@@ -2,19 +2,14 @@ import Foundation
 import Capacitor
 import UIKit
 
-/**
- * Minimal local Capacitor plugin that hands a self-contained HTML document to the iOS system
- * print sheet (Save to Files as PDF, share, a real printer). The printable plan page
- * (lib/plan-share.js planPrintHTML) reaches a PDF this way without bundling a PDF library —
- * UIKit renders it.
- *
- * Usage from JS:
- *   import { registerPlugin } from '@capacitor/core';
- *   const Print = registerPlugin('Print');
- *   await Print.printHtml({ html: '<!doctype html>…', name: 'Weekly Training Plan' });
- */
+/// Local system print sheet plugin for plans and document export.
 @objc(PrintPlugin)
-public class PrintPlugin: CAPPlugin {
+public class PrintPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "PrintPlugin"
+    public let jsName = "Print"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "printHtml", returnType: CAPPluginReturnPromise)
+    ]
 
     @objc func printHtml(_ call: CAPPluginCall) {
         guard let html = call.getString("html"), !html.isEmpty else {
@@ -31,8 +26,6 @@ public class PrintPlugin: CAPPlugin {
             info.jobName = jobName
             controller.printInfo = info
 
-            // The document carries its own @page margins; keep the formatter's own insets at 0
-            // so they don't stack on top.
             let formatter = UIMarkupTextPrintFormatter(markupText: html)
             formatter.perPageContentInsets = .zero
             controller.printFormatter = formatter

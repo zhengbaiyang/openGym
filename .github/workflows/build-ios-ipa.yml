@@ -1,19 +1,33 @@
-name: Build original openGym iOS unsigned IPA
+name: Build iOS 27 openGym unsigned IPA
 
 on:
   workflow_dispatch:
+  # Build the draft iOS customization once the changes are proposed. The original
+  # manually dispatched release build on main remains separate until merge.
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/build-ios-ipa.yml'
+
+concurrency:
+  group: ios27-unsigned-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   ios-unsigned-ipa:
-    name: Build unsigned iPhone IPA (original openGym)
-    runs-on: macos-15
+    name: Build ${{ matrix.variant }} iPhone IPA (Xcode 27)
+    runs-on: xcode-27
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [ui-only, healthkit-read]
     timeout-minutes: 90
 
     steps:
-      - name: Checkout the original openGym source
+      - name: Checkout openGym customization source
         uses: actions/checkout@v4
 
       - name: Configure Node.js
@@ -23,7 +37,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Verify Apple toolchain
+      - name: Verify Xcode 27 Apple toolchain
         run: |
           xcodebuild -version
           pod --version
@@ -49,6 +63,13 @@ jobs:
           fi
           echo "App version: $VERSION / build $BUILD"
           echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
+          # Only the separate Health test variant adds HealthKit entitlement and
+          # compiles the user-initiated READ-ONLY import methods. In particular,
+          # the UI-only IPA stays installable with profiles lacking HealthKit.
+          EXTRA_SETTINGS=("CODE_SIGN_ENTITLEMENTS=")
+          if [[ "${{ matrix.variant }}" == "healthkit-read" ]]; then
+            EXTRA_SETTINGS=("CODE_SIGN_ENTITLEMENTS=App/HealthKitRead.entitlements" "SWIFT_ACTIVE_COMPILATION_CONDITIONS=HEALTHKIT_IMPORT_ENABLED")
+          fi
           xcodebuild \
             -workspace frontend/ios/App/App.xcworkspace \
             -scheme App \
@@ -60,6 +81,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
+            "${EXTRA_SETTINGS[@]}" \
             archive
 
       - name: Package unsigned IPA and SHA256 checksum
@@ -75,6 +97,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/openGymPkg/Payload" "$OUT"
           ditto "$APP" "$RUNNER_TEMP/openGymPkg/Payload/App.app"
           IPA="openGym-${APP_VERSION}-unsigned.ipa"
+          if [[ "${{ matrix.variant }}" == "healthkit-read" ]]; then
+            IPA="openGym-${APP_VERSION}-healthkit-read-unsigned.ipa"
+          fi
           (cd "$RUNNER_TEMP/openGymPkg" && ditto -c -k --keepParent Payload "$OUT/$IPA")
           unzip -tq "$OUT/$IPA"
           (cd "$OUT" && shasum -a 256 "$IPA" > "$IPA.sha256")
@@ -83,7 +108,7 @@ jobs:
       - name: Upload unsigned IPA for signing in 全能签
         uses: actions/upload-artifact@v4
         with:
-          name: openGym-original-iOS-unsigned-IPA
+          name: openGym-iOS27-${{ matrix.variant }}-unsigned-IPA
           path: artifacts/openGym-*-unsigned.ipa*
           if-no-files-found: error
           retention-days: 30
