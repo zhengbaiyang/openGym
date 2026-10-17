@@ -26,7 +26,9 @@ final class NativeGlassLabOverlay: UIView {
         let combined = UIGlassContainerEffect()
         combined.spacing = 8
         glassContainer = UIVisualEffectView(effect: combined)
-        dockSurface = UIVisualEffectView(effect: UIGlassEffect())
+        let dockGlass = UIGlassEffect()
+        dockGlass.isInteractive = true
+        dockSurface = UIVisualEffectView(effect: dockGlass)
 
         var startConfiguration = UIButton.Configuration.prominentGlass()
         startConfiguration.image = UIImage(systemName: "play.fill",
