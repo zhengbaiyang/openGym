@@ -19,7 +19,8 @@ public class NativeGlassLabPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func inspect(_ call: CAPPluginCall) {
         if #available(iOS 26.0, *) {
             call.resolve(["supported": true, "platform": "ios", "material": "UIGlassEffect",
-                          "stage": "overlay-prototype", "active": host?.glassLabVisible ?? false])
+                          "stage": "overlay-prototype", "active": host?.glassLabVisible ?? false,
+                          "hostAttached": host != nil, "systemVersion": UIDevice.current.systemVersion])
         } else {
             call.resolve(["supported": false, "platform": "ios", "stage": "compatibility-fallback",
                           "active": false])
