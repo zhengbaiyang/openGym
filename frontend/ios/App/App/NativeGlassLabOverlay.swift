@@ -194,7 +194,16 @@ final class NativeGlassLabOverlay: UIView {
 
     private func select(_ key: String) {
         selectedKey = key
-        applySelection()
+        // Native feedback is intentionally restrained: the dock itself stays
+        // stable while the selected tint moves. Honor Reduce Motion.
+        if UIAccessibility.isReduceMotionEnabled {
+            applySelection()
+        } else {
+            UIView.animate(withDuration: 0.18, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
+                self.applySelection()
+            }
+        }
+        UISelectionFeedbackGenerator().selectionChanged()
         onSelection?(key)
     }
 
