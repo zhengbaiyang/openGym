@@ -19,7 +19,7 @@ describe('iOS 27 native Liquid Glass Phase 0 compositor', () => {
     const overlay = swift('NativeGlassLabOverlay.swift')
     expect(overlay).toContain('@available(iOS 26.0, *)')
     expect(overlay).toContain('UIGlassContainerEffect()')
-    expect(overlay).toContain('UIVisualEffectView(effect: glass)')
+    expect(overlay).toContain('glassContainer = UIVisualEffectView(effect: combined)')
     expect(overlay).toContain('UIButton.Configuration.prominentGlass()')
     expect(overlay).toContain('dockSurface = UIVisualEffectView(effect: dockGlass)')
     expect(overlay).toContain('dockGlass.isInteractive = true')
