@@ -58,15 +58,18 @@ export default function GlassLab() {
         <p className="muted small">Build marker: {NATIVE_GLASS_STAGE}</p>
         <p className="muted">The five controls floating over this page are rendered by UIKit, not CSS. They are a test fixture and do not change your workout or navigate the actual tabs.</p>
         <div role="status" aria-live="polite">
-          <strong>UIKit material:</strong> {info?.supported ? 'UIGlassEffect (native)' : 'Not available'}
+          <strong>UIKit material:</strong> {info === null ? 'Checking…' : info.supported ? 'UIGlassEffect (native)' : 'Not available'}
         </div>
+        <div><strong>WebKit reply handler:</strong> {info === null ? 'Checking…' : info.webkitHandlerPresent ? 'Detected' : 'Missing'}</div>
+        <div><strong>Bridge transport:</strong> {info?.transport || 'Checking…'}</div>
         <div><strong>Bridge registration:</strong> {info === null ? 'Checking…' : info.bridgeRegistered ? 'Detected' : 'Not detected'}</div>
         <div><strong>Inspect stage:</strong> {info?.stage || 'Checking…'}</div>
         <div><strong>Native host:</strong> {info?.hostAttached === undefined ? 'Unknown' : info.hostAttached ? 'Attached' : 'Missing'}</div>
         {info?.diagnostic && <p className="ios-glass-lab-error" role="alert">Native error: {info.diagnostic}</p>}
+        {info?.labRoute === false && <p className="ios-glass-lab-error" role="alert">Native shell does not recognize the #/glass-lab route.</p>}
         <div><strong>Last native button:</strong> {selected} · {taps} taps</div>
         <div><strong>WebView content taps:</strong> {webTaps}</div>
-        {error && <p role="alert">{error}</p>}
+        {error && <p className="ios-glass-lab-error" role="alert">Overlay error: {error}</p>}
         {info && !info.supported && <p className="muted">The native overlay cannot be displayed. If your phone runs iOS 26+, this indicates a bridge/installation problem rather than normal compatibility behavior. Send a screenshot of this report.</p>}
       </section>
 
