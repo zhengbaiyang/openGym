@@ -18,7 +18,7 @@ export default function NativeGlassLabEntry() {
   if (!available) return null
   return (
     <button className="card ios-native-glass-entry" onClick={() => navigate('/glass-lab')}>
-      <span className="ios-native-glass-entry-icon"><Icon name="layers" /></span>
+      <span className="ios-native-glass-entry-icon"><Icon name="sparkles" /></span>
       <span className="ios-native-glass-entry-copy">
         <strong>Native Liquid Glass preview</strong>
         <span>UIKit over the scrolling app · experimental</span>
