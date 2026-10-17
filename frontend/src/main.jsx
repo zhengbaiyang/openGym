@@ -10,6 +10,7 @@ import './ios-glass.css'
 import './ios-health.css'
 import './ios-polish.css'
 import './ios-polish-phase2.css'
+import './ios-glass-lab.css'
 import { setIOSGlassPlatform } from './lib/ios-glass.js'
 
 // Mark only the native iOS shell. Safari/PWA and Android retain the upstream UI.
