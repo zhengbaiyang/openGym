@@ -1,6 +1,6 @@
 import UIKit
 
-/// Stage 0 R4 — a *single* native glass dock, not five separate floating
+/// Stage 0 R5 — native glass dock with readable labels and real press states.
 /// Liquid Glass bubbles. UIKit renders the glass over the scrolling WKWebView.
 /// The isolated /glass-lab still owns this prototype: production navigation is
 /// unchanged until on-device visual, tap and scroll acceptance.
@@ -17,7 +17,20 @@ final class NativeGlassLabOverlay: UIView {
     private var tabButtons: [String: UIButton] = [:]
     private var tabIcons: [String: UIImageView] = [:]
     private var tabLabels: [String: UILabel] = [:]
+    private var tabPressPlates: [String: UIView] = [:]
+    private var pressedTabs = Set<String>()
     private var selectedKey = "home"
+
+    // The non-active controls use semantic, full-strength system label colors
+    // rather than .secondaryLabel, which washed out against bright frosted UI.
+    // A deeper green identifies the active tab without disappearing on cyan.
+    private var selectedInk: UIColor {
+        UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.03, green: 0.40, blue: 0.22, alpha: 1)
+                : UIColor(red: 0.04, green: 0.39, blue: 0.22, alpha: 1)
+        }
+    }
 
     override init(frame: CGRect) {
         // One full-width glass material anchors the four normal tabs. Only the
@@ -80,7 +93,7 @@ final class NativeGlassLabOverlay: UIView {
                 row.addArrangedSubview(middle)
 
                 startLabel.text = "Start"
-                startLabel.font = .systemFont(ofSize: 10, weight: .semibold)
+                startLabel.font = .systemFont(ofSize: 11, weight: .semibold)
                 startLabel.textColor = .label
                 startLabel.adjustsFontForContentSizeCategory = true
                 startLabel.textAlignment = .center
@@ -151,10 +164,27 @@ final class NativeGlassLabOverlay: UIView {
         button.layer.cornerRadius = 18
         button.layer.cornerCurve = .continuous
 
+        // Per-tab response is a local translucent material highlight INSIDE
+        // the common glass capsule — not another permanent glass bubble.
+        // The inset plate is non-interactive, preserving the full 44+pt target.
+        let pressPlate = UIView()
+        pressPlate.isUserInteractionEnabled = false
+        pressPlate.layer.cornerRadius = 17
+        pressPlate.layer.cornerCurve = .continuous
+        pressPlate.layer.borderWidth = 1
+        pressPlate.translatesAutoresizingMaskIntoConstraints = false
+        button.addSubview(pressPlate)
+        NSLayoutConstraint.activate([
+            pressPlate.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 3),
+            pressPlate.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -3),
+            pressPlate.topAnchor.constraint(equalTo: button.topAnchor, constant: 2),
+            pressPlate.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -2)
+        ])
+
         let icon = UIImageView(image: UIImage(systemName: symbol,
-                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)))
+                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 21, weight: .semibold)))
         icon.contentMode = .scaleAspectFit
-        icon.tintColor = .secondaryLabel
+        icon.tintColor = .label
         icon.translatesAutoresizingMaskIntoConstraints = false
 
         let caption = UILabel()
@@ -163,9 +193,9 @@ final class NativeGlassLabOverlay: UIView {
         caption.numberOfLines = 1
         caption.lineBreakMode = .byClipping
         caption.adjustsFontSizeToFitWidth = true
-        caption.minimumScaleFactor = 0.84
-        caption.font = .systemFont(ofSize: 10, weight: .medium)
-        caption.textColor = .secondaryLabel
+        caption.minimumScaleFactor = 0.90
+        caption.font = .systemFont(ofSize: 11, weight: .semibold)
+        caption.textColor = .label
         caption.translatesAutoresizingMaskIntoConstraints = false
 
         // The native control fills its cell; the image/label are decorative,
@@ -188,10 +218,71 @@ final class NativeGlassLabOverlay: UIView {
             caption.widthAnchor.constraint(lessThanOrEqualTo: button.widthAnchor, constant: -4)
         ])
 
-        button.addAction(UIAction { [weak self] _ in self?.select(key) }, for: .touchUpInside)
+        button.addAction(UIAction { [weak self] _ in self?.setTabPressed(key, true) },
+                         for: [.touchDown, .touchDragEnter])
+        button.addAction(UIAction { [weak self] _ in self?.setTabPressed(key, false) },
+                         for: [.touchDragExit, .touchCancel, .touchUpOutside])
+        button.addAction(UIAction { [weak self] _ in
+            self?.setTabPressed(key, false)
+            self?.select(key)
+        }, for: .touchUpInside)
+        tabPressPlates[key] = pressPlate
         tabIcons[key] = icon
         tabLabels[key] = caption
         return button
+    }
+
+    /// Standard UIButton press feedback: a local frosted/tinted material lift,
+    /// an immediate light scale on touchDown, and a spring back on release.
+    /// UIControl cancel/drag exit MUST clear the pressed state.
+    private func setTabPressed(_ key: String, _ pressed: Bool) {
+        guard let button = tabButtons[key] else { return }
+        if pressed { pressedTabs.insert(key) }
+        else { pressedTabs.remove(key) }
+        let update = {
+            button.transform = pressed
+                ? CGAffineTransform(scaleX: 0.94, y: 0.94)
+                : .identity
+            self.paintTab(key)
+        }
+        if UIAccessibility.isReduceMotionEnabled {
+            update()
+        } else if pressed {
+            UIView.animate(withDuration: 0.10, delay: 0,
+                           options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
+                           animations: update)
+        } else {
+            UIView.animate(withDuration: 0.24, delay: 0,
+                           usingSpringWithDamping: 0.72, initialSpringVelocity: 0.6,
+                           options: [.allowUserInteraction, .beginFromCurrentState],
+                           animations: update)
+        }
+    }
+
+    private func paintTab(_ key: String) {
+        guard let button = tabButtons[key], let plate = tabPressPlates[key] else { return }
+        let selected = key == selectedKey
+        let pressed = pressedTabs.contains(key)
+        // Preserve glass transmission. Temporary material feedback appears
+        // instantly on touchDown and returns to the selected/rest state.
+        if pressed {
+            plate.backgroundColor = selected
+                ? UIColor.systemGreen.withAlphaComponent(0.32)
+                : UIColor.label.withAlphaComponent(0.18)
+            plate.layer.borderColor = UIColor.label.withAlphaComponent(0.25).cgColor
+        } else {
+            plate.backgroundColor = selected
+                ? UIColor.systemGreen.withAlphaComponent(0.20)
+                : .clear
+            plate.layer.borderColor = selected
+                ? UIColor.systemGreen.withAlphaComponent(0.38).cgColor
+                : UIColor.clear.cgColor
+        }
+        button.backgroundColor = .clear
+        tabIcons[key]?.tintColor = selected ? selectedInk : .label
+        tabLabels[key]?.textColor = selected ? selectedInk : .label
+        if selected { button.accessibilityTraits.insert(.selected) }
+        else { button.accessibilityTraits.remove(.selected) }
     }
 
     private func select(_ key: String) {
@@ -210,14 +301,7 @@ final class NativeGlassLabOverlay: UIView {
     }
 
     private func applySelection() {
-        for (key, button) in tabButtons {
-            let active = key == selectedKey
-            button.backgroundColor = active ? UIColor.systemGreen.withAlphaComponent(0.12) : .clear
-            tabIcons[key]?.tintColor = active ? .systemGreen : .secondaryLabel
-            tabLabels[key]?.textColor = active ? .systemGreen : .secondaryLabel
-            if active { button.accessibilityTraits.insert(.selected) }
-            else { button.accessibilityTraits.remove(.selected) }
-        }
+        for key in tabButtons.keys { paintTab(key) }
         startLabel.textColor = selectedKey == "start" ? .systemGreen : .label
         if selectedKey == "start" { startButton.accessibilityTraits.insert(.selected) }
         else { startButton.accessibilityTraits.remove(.selected) }
