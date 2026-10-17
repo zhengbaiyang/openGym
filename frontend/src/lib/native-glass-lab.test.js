@@ -21,7 +21,8 @@ describe('iOS 27 native Liquid Glass Phase 0 compositor', () => {
     expect(overlay).toContain('UIGlassContainerEffect()')
     expect(overlay).toContain('UIVisualEffectView(effect: glass)')
     expect(overlay).toContain('UIButton.Configuration.prominentGlass()')
-    expect(overlay).toContain('dockSurface = UIVisualEffectView(effect: UIGlassEffect())')
+    expect(overlay).toContain('dockSurface = UIVisualEffectView(effect: dockGlass)')
+    expect(overlay).toContain('dockGlass.isInteractive = true')
     expect(overlay).toContain('glassContainer.contentView.addSubview(dockSurface)')
     expect(overlay).toContain('dockSurface.contentView.addSubview(row)')
     // One continuous glass capsule and one prominent Start, NOT five bubbles.
