@@ -1,10 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
+import { withGlassBridgeTimeout } from './native-glass-lab.js'
 
 const file = name => readFileSync(new URL(name, import.meta.url), 'utf8')
 const swift = name => readFileSync(new URL('../../ios/App/App/' + name, import.meta.url), 'utf8')
 
 describe('iOS 27 native Liquid Glass Phase 0 compositor', () => {
+  it('settles successful WebKit replies without waiting for fallback', async () => {
+    await expect(withGlassBridgeTimeout(Promise.resolve({ supported: true }), 'UIKit test', 300))
+      .resolves.toEqual({ supported: true })
+  })
+
+  it('reports a missing native response within a bounded time', async () => {
+    await expect(withGlassBridgeTimeout(new Promise(() => {}), 'UIKit inspect', 15))
+      .rejects.toThrow('UIKit inspect timed out')
+  })
   it('uses real UIKit glass materials, never a CSS-only fake', () => {
     const overlay = swift('NativeGlassLabOverlay.swift')
     expect(overlay).toContain('@available(iOS 26.0, *)')
