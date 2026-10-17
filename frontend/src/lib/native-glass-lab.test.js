@@ -31,6 +31,9 @@ describe('iOS 27 native Liquid Glass Phase 0 compositor', () => {
     expect(overlay).toContain('caption.numberOfLines = 1')
     expect(overlay).toContain('caption.adjustsFontSizeToFitWidth = true')
     expect(overlay).toContain('button.accessibilityTraits.insert(.selected)')
+    expect(overlay).toContain('UIAccessibility.isReduceMotionEnabled')
+    expect(overlay).toContain('UISelectionFeedbackGenerator().selectionChanged()')
+    expect(overlay).toContain('button.accessibilityIdentifier = "glass-lab-" + key')
   })
 
   it('keeps the fullscreen overlay transparent with touch pass-through', () => {
