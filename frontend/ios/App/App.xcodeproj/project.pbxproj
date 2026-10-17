@@ -20,6 +20,8 @@
 		BB0200000000000000000002 /* HealthReadProbePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0200000000000000000001 /* HealthReadProbePlugin.swift */; };
 		DD0400000000000000000002 /* HealthWorkoutStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0400000000000000000001 /* HealthWorkoutStore.swift */; };
 		CC0300000000000000000002 /* AppBridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0300000000000000000001 /* AppBridgeViewController.swift */; };
+		EE0500000000000000000002 /* NativeGlassLabOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0500000000000000000001 /* NativeGlassLabOverlay.swift */; };
+		EE0500000000000000000004 /* NativeGlassLabPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0500000000000000000003 /* NativeGlassLabPlugin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		DD0400000000000000000001 /* HealthWorkoutStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthWorkoutStore.swift; sourceTree = "<group>"; };
 		DD0400000000000000000003 /* HealthKitRead.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HealthKitRead.entitlements; sourceTree = "<group>"; };
 		CC0300000000000000000001 /* AppBridgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBridgeViewController.swift; sourceTree = "<group>"; };
+		EE0500000000000000000001 /* NativeGlassLabOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeGlassLabOverlay.swift; sourceTree = "<group>"; };
+		EE0500000000000000000003 /* NativeGlassLabPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeGlassLabPlugin.swift; sourceTree = "<group>"; };
 		504EC30C1FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		504EC30E1FED79650016851F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 				DD0400000000000000000001 /* HealthWorkoutStore.swift */,
 				DD0400000000000000000003 /* HealthKitRead.entitlements */,
 				CC0300000000000000000001 /* AppBridgeViewController.swift */,
+				EE0500000000000000000001 /* NativeGlassLabOverlay.swift */,
+				EE0500000000000000000003 /* NativeGlassLabPlugin.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -232,6 +238,8 @@
 				BB0200000000000000000002 /* HealthReadProbePlugin.swift in Sources */,
 				DD0400000000000000000002 /* HealthWorkoutStore.swift in Sources */,
 				CC0300000000000000000002 /* AppBridgeViewController.swift in Sources */,
+				EE0500000000000000000002 /* NativeGlassLabOverlay.swift in Sources */,
+				EE0500000000000000000004 /* NativeGlassLabPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
