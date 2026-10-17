@@ -3,7 +3,7 @@
 // Neither transport changes production navigation, workouts or HealthKit state.
 import { MOBILE } from './mobile.js'
 
-export const NATIVE_GLASS_STAGE = 'Stage 0 R4 · 2026-10-17'
+export const NATIVE_GLASS_STAGE = 'Stage 0 R5 · 2026-10-17'
 const BRIDGE_TIMEOUT_MS = 3500
 let activeTransport = 'none'
 
