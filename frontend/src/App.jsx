@@ -31,6 +31,7 @@ import Login from './views/Login.jsx'
 import MobileOnboarding from './views/MobileOnboarding.jsx'
 import Home from './views/Home.jsx'
 import Health from './views/Health.jsx'
+import GlassLab from './views/GlassLab.jsx'
 import CheckIn from './views/CheckIn.jsx'
 import Plan from './views/Plan.jsx'
 import RoutineEdit from './views/RoutineEdit.jsx'
@@ -186,7 +187,7 @@ function Shell() {
   }, [inWorkout])
   // The chat owns the bottom of the screen as well: its composer sits where the tabs would be.
   // The first-launch card has no tabs either: they changed the route behind it.
-  const noTabs = inWorkout || loc.pathname === '/coach' || needsMobileOnboarding
+  const noTabs = inWorkout || loc.pathname === '/coach' || loc.pathname === '/glass-lab' || needsMobileOnboarding
 
   const authed = user || isGuest
   if (!ready && !authed) return (
@@ -207,6 +208,7 @@ function Shell() {
             <Routes>
               <Route path="/home" element={<Home />} />
               <Route path="/health" element={<Health />} />
+              <Route path="/glass-lab" element={<GlassLab />} />
               {/* Gym check-in — switched off in Settings, the route falls through to the
                   catch-all redirect below. */}
               {S.checkIn !== false && <Route path="/checkin" element={<CheckIn />} />}
